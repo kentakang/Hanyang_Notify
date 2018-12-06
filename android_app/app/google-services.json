@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "455422775173",
+    "firebase_url": "https://hanyang-675a9.firebaseio.com",
+    "project_id": "hanyang-675a9",
+    "storage_bucket": "hanyang-675a9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:455422775173:android:4a8b83013d925f8d",
+        "android_client_info": {
+          "package_name": "com.kentakang.hanyangnotify"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "455422775173-2cv11jqtua8cna85j0ua5kkfs6jv192m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kentakang.hanyangnotify",
+            "certificate_hash": "cc9d4e326aa1abe07797a55e4deca056aa7dc5dd"
+          }
+        },
+        {
+          "client_id": "455422775173-rj6oce2qs66bcmb68ckvqv269q8uubm6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCy0JnVxxt23vfVnp5a_cvpkdFAnNanLr8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "455422775173-rj6oce2qs66bcmb68ckvqv269q8uubm6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

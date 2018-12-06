@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">한양알림이</string>
+    <string name="default_notification_channel_id">한양알림이</string>
+    <string name="acc_notification_icon">ic_stat_fastfood</string>
+</resources>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- MainActivity in xxxhdpi -->
+
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/drawerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- 메인 화면 내부 콘텐츠 -->
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!-- 상단 배너 부분 -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/header_banner"
+                android:orientation="vertical">
+
+                <!-- 배너 상단바 부분 -->
+
+                <android.support.v7.widget.Toolbar
+
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="?attr/actionBarSize">
+
+                    <ImageButton
+                        android:id="@+id/drawerButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/baseline_menu_white_36" />
+
+                    <TextView
+                        android:id="@+id/mainTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="35dp"
+                        android:text="@string/app_name"
+                        android:textAlignment="viewStart"
+                        android:textColor="#ffffff"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                </android.support.v7.widget.Toolbar>
+
+                <!-- 배너 하단 아이콘 부분 -->
+
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/mainRecycler"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginTop="250dp" />
+
+        </FrameLayout>
+
+        <!-- Drawer 부분 레이아웃 -->
+
+        <include layout="@layout/activity_drawer" />
+
+    </android.support.v4.widget.DrawerLayout>
+
+</LinearLayout>
