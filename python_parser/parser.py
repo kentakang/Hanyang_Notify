@@ -7,12 +7,13 @@ from datetime import datetime
 import re
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-import pymysql
+import psycopg2
 
 # DB 설정
-conn = pymysql.connect(host='', user='', password='', db='', charset='utf8')
-curs = conn.cursor(pymysql.cursors.DictCursor)
-countCurs = conn.cursor(pymysql.cursors.Cursor)
+conn = None
+dbUser = ""
+dbPassword = ""
+dbName = ""
 
 year = str(datetime.today().year)
 month = datetime.today().strftime("%m")
@@ -34,41 +35,48 @@ def get_meal():
     for br in bs.find_all('br'):
         br.replace_with("\n")
 
-    sql = "INSERT INTO mealList(year, month, day, type, food) VALUES (%s, %s, %s, %s, %s)"
+    sql = "INSERT INTO mealList(year, month, day, type, food) VALUES (%s, %s, %s, %s, %s);"
     countSQL = "SELECT COUNT(*) FROM mealList WHERE year = %s and month = %s"
 
-    countCurs.execute(countSQL, (year, month))
-    result = countCurs.fetchone()
+    try:
+        with psycopg2.connect("host=localhost dbname={0} user={1} password={2}".format(dbName, dbUser, dbPassword)) as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(countSQL, (year, month))
+                if cursor.fetchone()[0] == 0:
+                    for i in dayTable:
+                        day = re.findall("\\d+", i.get_text())
+                        meal = re.findall("[가-힣]+", i.get_text())
 
-    if (result[0] == 0):
-        for i in dayTable:
-            day = re.findall("\\d+", i.get_text())
-            meal = re.findall("[가-힣]+", i.get_text())
+                        if (len(day) > 0):
+                            x = 0
+                            food = ""
+                            isDinner = False
 
-            if (len(day) > 0):
-                x = 0
-                food = ""
-                isDinner = False
+                            for j in meal:
+                                if j == "석식":
+                                    print(food)
+                                    cursor.execute(sql, (year, month, day[0], 'lunch', food))
+                                    isDinner = True
+                                    food = ""
+                                elif j == "중식":
+                                    print("중식")
+                                else:
+                                    food += j + ","
 
-                for j in meal:
-                    if j == "석식":
-                        print(food)
-                        curs.execute(sql, (year, month, day[0], 'lunch', food))
-                        isDinner = True
-                        food = ""
-                    elif j == "중식":
-                        print("중식")
-                    else:
-                        food += j + ","
+                                if x + 1 == len(meal):
+                                    print(food)
+                                    if (isDinner):
+                                        cursor.execute(sql, (year, month, day[0], 'dinner', food))
+                                    else:
+                                        cursor.execute(sql, (year, month, day[0], 'lunch', food))
+                                else:
+                                    x += 1
 
-                    if x + 1 == len(meal):
-                        print(food)
-                        if (isDinner):
-                            curs.execute(sql, (year, month, day[0], 'dinner', food))
-                        else:
-                            curs.execute(sql, (year, month, day[0], 'lunch', food))
-                    else:
-                        x += 1
+    except Exception as exception:
+        print(exception)
+    finally:
+        if conn:
+            conn.close()
 
 # 학사일정 파싱
 def get_schedule():
@@ -87,34 +95,38 @@ def get_schedule():
     sql = "INSERT INTO scheduleList(year, month, day, schedule) VALUES (%s, %s, %s, %s)"
     countSQL = "SELECT COUNT(*) FROM scheduleList WHERE year = %s and month = %s"
 
-    countCurs.execute(countSQL, (year, month))
-    result = countCurs.fetchone()
+    try:
+        with psycopg2.connect("host=localhost dbname={0} user={1} password={2}".format(dbName, dbUser, dbPassword)) as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(countSQL, (year, month))
+                if cursor.fetchone()[0] == 0:
+                    for i in dayTable:
+                        day = re.findall("\\d+", i.get_text())
+                        schedules = re.findall("[가-힣()(정·부회장 선거),]+", i.get_text())
 
-    print(month)
+                        if (len(day) > 0):
+                            x = 0
+                            schedule = ""
 
-    if (result[0] == 0):
-        for i in dayTable:
-            day = re.findall("\\d+", i.get_text())
-            schedules = re.findall("[가-힣()(정·부회장 선거),]+", i.get_text())
+                            for j in schedules:
+                                schedule += j
 
-            if (len(day) > 0):
-                x = 0
-                schedule = ""
-
-                for j in schedules:
-                    schedule += j
-
-                if x + 1 == len(schedules):
-                    curs.execute(sql, (year, month, day[0], schedule))
-                else:
-                    x += 1
+                            if x + 1 == len(schedules):
+                                cursor.execute(sql, (year, month, day[0], schedule))
+                            else:
+                                x += 1
+    except Exception as exception:
+        print(exception)
+    finally:
+        if conn:
+            conn.close()
 
 # 가정통신문 파싱
 def get_document():
     chrome_options = Options()
     chrome_options.add_argument("--headless")
 
-    driver = webdriver.Chrome('./chromedriver', chrome_options=chrome_options)
+    driver = webdriver.Chrome('../../chromedriver', chrome_options=chrome_options)
     driver.implicitly_wait(3)
     driver.get('http://hanyang.hs.kr/8666/subMenu.do')
 
@@ -128,16 +140,20 @@ def get_document():
         sql = "INSERT INTO documentList(title, date) VALUES (%s, %s)"
         countSQL = "SELECT COUNT(*) FROM documentList WHERE title = %s and date = %s"
 
-        countCurs.execute(countSQL, (title.text, days[idx]))
-        result = countCurs.fetchone()
-
-        if (result[0] == 0):
-            curs.execute(sql, (title.text, days[idx]))
+        try:
+            with psycopg2.connect("host=localhost dbname={0} user={1} password={2}".format(dbName, dbUser, dbPassword)) as conn:
+                with conn.cursor() as cursor:
+                    cursor.execute(countSQL, (title.text, days[idx]))
+                    if cursor.fetchone()[0] == 0:
+                        cursor.execute(sql, (title.text, days[idx]))
+        except Exception as exception:
+            print(exception)
+        finally:
+            if conn:
+                conn.close()
 
         idx += 1
 
 get_document()
 get_meal()
 get_schedule()
-conn.commit()
-conn.close()
