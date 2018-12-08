@@ -1,5 +1,14 @@
 <resources>
-    <string name="app_name">한양알림이</string>
-    <string name="default_notification_channel_id">한양알림이</string>
-    <string name="acc_notification_icon">ic_stat_fastfood</string>
+    <string name="app_name">HanyangNotify</string>
+    <string name="main_lunch">Lunch</string>
+    <string name="main_dinner">Dinner</string>
+    <string name="bottomnav_main">Main</string>
+    <string name="bottomnav_meal">Meal</string>
+    <string name="bottomnav_document">Documents</string>
+    <string name="bottomnav_schedule">Schedules</string>
+    <string name="bottomnav_settings">Settings</string>
+    <string name="main_document">Recent Documents</string>
+    <string name="main_schedules">Today Schedules</string>
+    <string name="settings_info">Info</string>
+    <string name="settings_oss">OSS License</string>
 </resources>

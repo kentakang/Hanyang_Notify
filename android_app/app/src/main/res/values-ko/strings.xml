@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">한양알림이</string>
+    <string name="main_lunch">점심</string>
+    <string name="main_dinner">석식</string>
+    <string name="bottomnav_main">메인</string>
+    <string name="bottomnav_meal">급식</string>
+    <string name="bottomnav_document">가정통신문</string>
+    <string name="bottomnav_schedule">학사일정</string>
+    <string name="bottomnav_settings">설정</string>
+    <string name="main_document">최근 가정통신문</string>
+    <string name="main_schedules">오늘의 학사일정</string>
+    <string name="settings_info">정보</string>
+    <string name="settings_oss">오픈소스 라이센스</string>
+</resources>
