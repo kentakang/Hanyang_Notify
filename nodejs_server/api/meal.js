@@ -28,11 +28,13 @@ router.get('/:date', (req, res) => {
     if (err) {
       res.status(500);
       res.json({ message: err });
-    } else {
+    } else if (sqlRes.rowCount > 0) {
       const sendData = [];
 
       sqlRes.rows.forEach(data => sendData.push(data));
-      res.json(sendData);
+      res.send(sendData);
+    } else {
+      res.json([{ type: 'lunch', food: '급식이 없습니다.' }, { type: 'dinner', food: '급식이 없습니다.' }]);
     }
   });
 });

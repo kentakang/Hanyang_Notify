@@ -46,7 +46,7 @@ router.get('/:month', (req, res) => {
       const sendData = [];
 
       sqlRes.rows.forEach(data => sendData.push(data));
-      res.json(sendData);
+      res.send(sendData);
     }
   });
 });
