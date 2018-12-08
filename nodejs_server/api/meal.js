@@ -21,8 +21,15 @@ client.connect();
 
 router.get('/:date', (req, res) => {
   const sql = 'SELECT type, food FROM mealList WHERE year=$1 and month=$2 and day=$3';
-  const date = req.params.date.split('-');
-  const values = [date[0], date[1].replace('0', ''), date[2].replace('0', '')];
+  const values = req.params.date.split('-');
+
+  if (values[1] < 10) {
+    values[1] = values[1].replace('0', '');
+  }
+
+  if (values[2] < 10) {
+    values[2] = values[2].replace('0', '');
+  }
 
   client.query(sql, values, (err, sqlRes) => {
     if (err) {
