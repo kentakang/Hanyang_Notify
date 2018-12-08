@@ -32,13 +32,10 @@ router.get('/', (req, res) => {
   });
 });
 
-router.get('/:month', (req, res) => {
-  const sql = 'SELECT * FROM documentList WHERE date BETWEEN TO_DATE($1, \'YYYY-MM-DD\') AND TO_DATE($2, \'YYYY-MM-DD\')';
-  const month = req.params.month.split('-');
-  const lastDay = '-'.concat(new Date(month[0], month[1], 0).getDate());
-  const values = [req.params.month.concat('-01'), req.params.month.concat(lastDay)];
+router.get('/all', (req, res) => {
+  const sql = 'SELECT * FROM documentList ORDER BY date desc';
 
-  client.query(sql, values, (err, sqlRes) => {
+  client.query(sql, (err, sqlRes) => {
     if (err) {
       res.status(500);
       res.json({ message: err });
