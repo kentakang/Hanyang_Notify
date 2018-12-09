@@ -21,6 +21,7 @@
         <activity android:name=".SettingsOSSActivity" />
         <activity android:name=".MealActivity" />
         <activity android:name=".DocumentActivity" />
+        <activity android:name=".DocumentViewActivity" />
         <activity android:name=".ScheduleActivity" />
     </application>
 

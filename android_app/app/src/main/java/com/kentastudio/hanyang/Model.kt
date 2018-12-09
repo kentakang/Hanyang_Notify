@@ -10,6 +10,6 @@ object Model {
     data class Schedule(var schedule: String)
     data class Document(var title: String)
     data class MealList(val date: String, val meal: List<Model.Meal>)
-    data class DocumentList(val title: String, val date: String)
+    data class DocumentList(val title: String, val date: String, val url: String)
     data class ScheduleList(val date: String, val schedule: String)
 }

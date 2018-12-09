@@ -23,7 +23,9 @@ import java.util.*
 class DocumentActivity : AppCompatActivity() {
 
     var documentList: ArrayList<Model.DocumentList> = ArrayList()
-    var documentAdapter = DocumentAdapter(this, documentList)
+    var documentAdapter = DocumentAdapter(this, documentList) { documentList ->
+        startActivity(Intent(this, DocumentViewActivity::class.java).putExtra("link", documentList.url))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,7 +74,7 @@ class DocumentActivity : AppCompatActivity() {
                     if (response.isSuccessful) {
                         response.body()!!.forEach {
                             val date = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(it.date)
-                            documentList.add(Model.DocumentList(it.title, SimpleDateFormat("yyyy년 MM월 dd일").format(date)))
+                            documentList.add(Model.DocumentList(it.title, SimpleDateFormat("yyyy년 MM월 dd일").format(date), it.url))
                             documentAdapter.notifyItemInserted(position++)
                         }
                     }
