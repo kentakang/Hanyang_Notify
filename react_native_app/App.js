@@ -3,10 +3,12 @@ import { Text } from 'react-native';
 import { createBottomTabNavigator, createAppContainer } from 'react-navigation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Home from './pages/Home';
+import Meal from './pages/Meal';
 
 const Navigator = createBottomTabNavigator(
   {
-    Home: Home
+    Home: Home,
+    Meal: Meal
   },
   {
     defaultNavigationOptions: ({ navigation }) => ({
@@ -18,6 +20,9 @@ const Navigator = createBottomTabNavigator(
         switch (routeName) {
           case 'Home':
             iconName = `ios-home`;
+            break;
+          case 'Meal':
+            iconName = 'ios-restaurant';
             break;
         }
 

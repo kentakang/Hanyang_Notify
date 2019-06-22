@@ -3,7 +3,7 @@ import { StatusBar } from 'react-native';
 import styled from 'styled-components/native';
 import moment from 'moment';
 import LottieView from 'lottie-react-native';
-import { Content, Card, CardItem, Text, Body } from 'native-base';
+import { Card, CardItem, Text, Body } from 'native-base';
 
 const Container = styled.View`
   flex: 1;
@@ -82,7 +82,10 @@ const Home = () => {
               <CardItem bordered>
                 <Body>
                   <Text>
-                    {`${mealData[0].food}`}
+                    {
+                      mealData[0] !== undefined ? `${mealData[0].food}`
+                      : '급식이 없습니다.'
+                    }
                   </Text>
                 </Body>
               </CardItem>
@@ -94,7 +97,10 @@ const Home = () => {
               <CardItem bordered>
                 <Body>
                   <Text>
-                    {`${mealData[1].food}`}
+                    {
+                      mealData[1] !== undefined ? `${mealData[1].food}`
+                      : '급식이 없습니다.'
+                    }
                   </Text>
                 </Body>
               </CardItem>
