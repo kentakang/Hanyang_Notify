@@ -4,6 +4,8 @@ import styled from 'styled-components/native';
 import moment from 'moment';
 import LottieView from 'lottie-react-native';
 import { Card, CardItem, Text, Body } from 'native-base';
+import { createStackNavigator, createAppContainer } from 'react-navigation';
+import View from './View';
 
 const Container = styled.View`
   flex: 1;
@@ -88,4 +90,13 @@ Document.navigationOptions = () => {
   };
 };
 
-export default Document;
+const AppNavigator = createStackNavigator({
+  Document: {
+    screen: Document
+  },
+  View: {
+    screen: View
+  }
+});
+
+export default createAppContainer(AppNavigator);

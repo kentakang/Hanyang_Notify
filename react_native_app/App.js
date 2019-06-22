@@ -1,5 +1,4 @@
 import React from 'react';
-import { Text } from 'react-native';
 import { createBottomTabNavigator, createAppContainer } from 'react-navigation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Home from './pages/Home';
