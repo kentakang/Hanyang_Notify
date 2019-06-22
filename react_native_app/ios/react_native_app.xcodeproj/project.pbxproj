@@ -79,6 +79,7 @@
 		929C6AA7B17E47E297E60D59 /* rubicon-icon-font.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2956FF08DF1E4D42AE0BC6BC /* rubicon-icon-font.ttf */; };
 		E255F1617AF54E5E91EDCC86 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 91E9E80F00174DEAB6DBA9FA /* SimpleLineIcons.ttf */; };
 		E392001716204A2396941FC6 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4F8D78B372174C898FE404F4 /* Zocial.ttf */; };
+		ED9734B90DFB42E5A01C81D9 /* libRNCWebView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 351F0DB9AF4142A6A9415308 /* libRNCWebView.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -430,6 +431,8 @@
 		2956FF08DF1E4D42AE0BC6BC /* rubicon-icon-font.ttf */ = {isa = PBXFileReference; name = "rubicon-icon-font.ttf"; path = "../node_modules/native-base/Fonts/rubicon-icon-font.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		91E9E80F00174DEAB6DBA9FA /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; name = "SimpleLineIcons.ttf"; path = "../node_modules/native-base/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		4F8D78B372174C898FE404F4 /* Zocial.ttf */ = {isa = PBXFileReference; name = "Zocial.ttf"; path = "../node_modules/native-base/Fonts/Zocial.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		0B03111299D74F3BB07BF224 /* RNCWebView.xcodeproj */ = {isa = PBXFileReference; name = "RNCWebView.xcodeproj"; path = "../node_modules/react-native-webview/ios/RNCWebView.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		351F0DB9AF4142A6A9415308 /* libRNCWebView.a */ = {isa = PBXFileReference; name = "libRNCWebView.a"; path = "libRNCWebView.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -463,6 +466,7 @@
 				FC086041BC954CAD8C0C42BA /* Lottie.framework in Frameworks */,
 				CCEE73A16CCD4AA4A129CC3C /* libLottie.a in Frameworks */,
 				94F1B35CA29E4B18A3025D87 /* libLottieReactNative.a in Frameworks */,
+				ED9734B90DFB42E5A01C81D9 /* libRNCWebView.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -658,6 +662,7 @@
 				E028C45FF19D49C1ADBBE3AE /* RNVectorIcons.xcodeproj */,
 				7EB76C2FF3104264B8F5D983 /* Lottie.xcodeproj */,
 				FEC33B5A83434CC596F61E3E /* LottieReactNative.xcodeproj */,
+				0B03111299D74F3BB07BF224 /* RNCWebView.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1367,6 +1372,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)/System/Library/Frameworks\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1374,6 +1380,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
 					"$(SRCROOT)\..\node_modules\lottie-ios\lottie-ios\Classes/**",
 					"$(SRCROOT)\..\node_modules\lottie-react-native\src\ios\LottieReactNative",
+					"$(SRCROOT)\..\node_modules\react-native-webview\ios",
 				);
 			};
 			name = Debug;
@@ -1402,6 +1409,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)/System/Library/Frameworks\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1409,6 +1417,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
 					"$(SRCROOT)\..\node_modules\lottie-ios\lottie-ios\Classes/**",
 					"$(SRCROOT)\..\node_modules\lottie-react-native\src\ios\LottieReactNative",
+					"$(SRCROOT)\..\node_modules\react-native-webview\ios",
 				);
 			};
 			name = Release;
@@ -1435,6 +1444,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
 					"$(SRCROOT)\..\node_modules\lottie-ios\lottie-ios\Classes/**",
 					"$(SRCROOT)\..\node_modules\lottie-react-native\src\ios\LottieReactNative",
+					"$(SRCROOT)\..\node_modules\react-native-webview\ios",
 				);
 			};
 			name = Debug;
@@ -1460,6 +1470,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
 					"$(SRCROOT)\..\node_modules\lottie-ios\lottie-ios\Classes/**",
 					"$(SRCROOT)\..\node_modules\lottie-react-native\src\ios\LottieReactNative",
+					"$(SRCROOT)\..\node_modules\react-native-webview\ios",
 				);
 			};
 			name = Release;
@@ -1496,6 +1507,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)/System/Library/Frameworks\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1503,6 +1515,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
 					"$(SRCROOT)\..\node_modules\lottie-ios\lottie-ios\Classes/**",
 					"$(SRCROOT)\..\node_modules\lottie-react-native\src\ios\LottieReactNative",
+					"$(SRCROOT)\..\node_modules\react-native-webview\ios",
 				);
 			};
 			name = Debug;
@@ -1539,6 +1552,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)/System/Library/Frameworks\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1546,6 +1560,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
 					"$(SRCROOT)\..\node_modules\lottie-ios\lottie-ios\Classes/**",
 					"$(SRCROOT)\..\node_modules\lottie-react-native\src\ios\LottieReactNative",
+					"$(SRCROOT)\..\node_modules\react-native-webview\ios",
 				);
 			};
 			name = Release;
@@ -1581,6 +1596,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)/System/Library/Frameworks\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1588,6 +1604,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
 					"$(SRCROOT)\..\node_modules\lottie-ios\lottie-ios\Classes/**",
 					"$(SRCROOT)\..\node_modules\lottie-react-native\src\ios\LottieReactNative",
+					"$(SRCROOT)\..\node_modules\react-native-webview\ios",
 				);
 			};
 			name = Debug;
@@ -1623,6 +1640,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)/System/Library/Frameworks\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1630,6 +1648,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
 					"$(SRCROOT)\..\node_modules\lottie-ios\lottie-ios\Classes/**",
 					"$(SRCROOT)\..\node_modules\lottie-react-native\src\ios\LottieReactNative",
+					"$(SRCROOT)\..\node_modules\react-native-webview\ios",
 				);
 			};
 			name = Release;
