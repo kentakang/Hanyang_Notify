@@ -4,11 +4,13 @@ import { createBottomTabNavigator, createAppContainer } from 'react-navigation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Home from './pages/Home';
 import Meal from './pages/Meal';
+import Document from './pages/Document';
 
 const Navigator = createBottomTabNavigator(
   {
     Home: Home,
-    Meal: Meal
+    Meal: Meal,
+    Document: Document
   },
   {
     defaultNavigationOptions: ({ navigation }) => ({
@@ -23,6 +25,9 @@ const Navigator = createBottomTabNavigator(
             break;
           case 'Meal':
             iconName = 'ios-restaurant';
+            break;
+          case 'Document':
+            iconName = 'ios-document';
             break;
         }
 
