@@ -12,7 +12,7 @@
     "native-base": "^2.12.1",
     "react": "16.8.3",
     "react-native": "0.59.9",
-    "react-native-calendar": "^0.13.1",
+    "react-native-calendars": "^1.188.0",
     "react-native-gesture-handler": "https://github.com/kentakang/react-native-gesture-handler",
     "react-native-vector-icons": "^6.5.0",
     "react-native-webview": "^6.3.0",
