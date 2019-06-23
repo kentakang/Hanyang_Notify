@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { StatusBar, Alert } from 'react-native';
+import { StatusBar, Alert, Platform } from 'react-native';
 import styled from 'styled-components/native';
 import LottieView from 'lottie-react-native';
 import { WebView } from 'react-native-webview';
@@ -54,7 +54,12 @@ const DocumentViewer = ({ navigation }) => {
         </BackButton>
         <Title>{navigation.getParam('title', 'Document Viewer')}</Title>
       </TitleBar>
-      <WebView source={{ uri: navigation.getParam('url', null) }} startInLoadingState={true} renderLoading={() => <LottieView source={require('../../resources/animation/loading.json')} autoPlay loop />} />
+      <WebView 
+        source={{ uri: navigation.getParam('url', null) }} 
+        startInLoadingState={true} 
+        renderLoading={() => <LottieView source={require('../../resources/animation/loading.json')} autoPlay loop />} 
+        scalesPageToFit={false}
+      />
     </Container>
   );
 };

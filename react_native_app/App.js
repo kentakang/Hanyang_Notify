@@ -5,13 +5,15 @@ import Home from './pages/Home';
 import Meal from './pages/Meal';
 import Document from './pages/Document';
 import Schedule from './pages/Schedule';
+import Settings from './pages/Settings';
 
 const Navigator = createBottomTabNavigator(
   {
     Home: Home,
     Meal: Meal,
     Document: Document,
-    Schedule: Schedule
+    Schedule: Schedule,
+    Settings: Settings
   },
   {
     defaultNavigationOptions: ({ navigation }) => ({
@@ -32,6 +34,9 @@ const Navigator = createBottomTabNavigator(
             break;
           case 'Schedule':
             iconName = 'ios-calendar';
+            break;
+          case 'Settings':
+            iconName = 'ios-settings';
             break;
         }
 
