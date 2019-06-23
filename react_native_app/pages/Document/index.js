@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { StatusBar, View } from 'react-native';
+import { StatusBar, TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
 import moment from 'moment';
 import LottieView from 'lottie-react-native';
 import { Card, CardItem, Text, Body } from 'native-base';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
-import View from './View';
+import DocumentViewer from '../DocumentViewer';
 
 const Container = styled.View`
   flex: 1;
@@ -33,7 +33,7 @@ const StyledCard = styled(Card)`
   margin: 5% 5% 0;
 `;
 
-const Document = () => {
+const Document = ({ navigation }) => {
   const [documentList, setDocumentList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -61,20 +61,25 @@ const Document = () => {
           <ScrollContainer>
             {documentList.map((data, index) => {
               return (
-                <StyledCard key={index}>
-                  <CardItem header>
-                    <Text>
-                      {data.title.replace(/^\s*/, "")}
-                    </Text>
-                  </CardItem>
-                  <CardItem>
-                    <Body>
+                <TouchableOpacity key={index} onPress={() => navigation.navigate('DocumentViewer', {
+                  title: '가정통신문',
+                  url: data.url
+                })}>
+                  <StyledCard>
+                    <CardItem header>
                       <Text>
-                        {moment(data.date).format('YYYY년 MM월 DD일')}
+                        {data.title.replace(/^\s*/, "")}
                       </Text>
-                    </Body>
-                  </CardItem>
-                </StyledCard>
+                    </CardItem>
+                    <CardItem>
+                      <Body>
+                        <Text>
+                          {moment(data.date).format('YYYY년 MM월 DD일')}
+                        </Text>
+                      </Body>
+                    </CardItem>
+                  </StyledCard>
+                </TouchableOpacity>
               );
             })}
           </ScrollContainer>
@@ -84,19 +89,28 @@ const Document = () => {
   );
 };
 
-Document.navigationOptions = () => {
+const AppNavigator = createStackNavigator(
+  {
+    Document: {
+      screen: Document
+    },
+    DocumentViewer: {
+      screen: DocumentViewer
+    }
+  },
+  {
+    defaultNavigationOptions: {
+      header: null
+    }
+  }
+);
+
+const AppContainer = createAppContainer(AppNavigator);
+
+AppContainer.navigationOptions = () => {
   return {
     title: '가정통신문',
   };
 };
 
-const AppNavigator = createStackNavigator({
-  Document: {
-    screen: Document
-  },
-  View: {
-    screen: View
-  }
-});
-
-export default createAppContainer(AppNavigator);
+export default AppContainer;
