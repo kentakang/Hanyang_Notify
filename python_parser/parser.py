@@ -8,6 +8,7 @@ import re
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import psycopg2
+import time
 
 # DB 설정
 conn = None
@@ -137,15 +138,26 @@ def get_document():
     idx = 0
 
     for title in notices:
-        sql = "INSERT INTO documentList(title, date) VALUES (%s, %s)"
+        sql = "INSERT INTO documentList(title, date, url) VALUES (%s, %s, %s)"
         countSQL = "SELECT COUNT(*) FROM documentList WHERE title = %s and date = %s"
+        updateSQL = "UPDATE documentList SET url = %s WHERE title = %s and date = %s"
+  
+        driver.execute_script(title['onclick'])
+        driver.implicitly_wait(3)
+
+        bs = BeautifulSoup(driver.page_source, 'html.parser')
+        file_id = bs.select('input[name=atchFileId]')
+        file_id = file_id[0]['value']
+        url = f'http://viewhosting.ssem.or.kr:8080/SynapDocViewServer/job?fid={file_id}&filePath=http://hanyang.hs.kr:80/dggb/cnvrFileDown.do?atchFileId={file_id}:0&convertType=0&fileType=URL&sync=true'
 
         try:
             with psycopg2.connect("host=localhost dbname={0} user={1} password={2}".format(dbName, dbUser, dbPassword)) as conn:
                 with conn.cursor() as cursor:
                     cursor.execute(countSQL, (title.text, days[idx]))
                     if cursor.fetchone()[0] == 0:
-                        cursor.execute(sql, (title.text, days[idx]))
+                        cursor.execute(sql, (title.text, days[idx], url))
+                    else:
+                        cursor.execute(updateSQL, (url, title.text, days[idx]))
         except Exception as exception:
             print(exception)
         finally:
