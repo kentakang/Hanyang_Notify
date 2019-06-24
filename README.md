@@ -17,4 +17,4 @@ New Application written by React Native. This application support iOS and Androi
 
 ## License
 All parts of project is under the MIT License.
-You can check libraries license in [OSS License Page](/android_app/app/src/main/assets/oss_license.html)
+You can check libraries license in [OSS License Page](https://hycoding.io/static/html/hanyangnotify_oss_license.html)
