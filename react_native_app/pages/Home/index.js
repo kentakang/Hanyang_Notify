@@ -15,14 +15,21 @@ const TitleBar = styled.View`
   width: 100%;
   height: 9%;
   background: #007ac1;
-  justify-content: center;
+  align-items: center;
+  flex-direction: row;
 `;
 
 const Title = styled.Text`
   color: #ffffff;
-  margin-left: 5%;
   font-weight: bold;
   font-size: 18;
+  margin-left: 3%;
+`;
+
+const TitleIcon = styled.Image`
+  width: 18;
+  height: 18;
+  margin-left: 5%;
 `;
 
 const Header = styled.Text`
@@ -68,6 +75,7 @@ const Home = () => {
     <Container>
       <StatusBar backgroundColor="#007ac1" barStyle="light-content" />
       <TitleBar>
+        <TitleIcon source={require('../../resources/images/Home.png')} resizeMode="contain" />
         <Title>한양알림이</Title>
       </TitleBar>
       <Header>{`${date.format('YYYY년 MM월 DD일')}`}</Header>
