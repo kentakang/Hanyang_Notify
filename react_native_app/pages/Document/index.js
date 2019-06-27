@@ -1,3 +1,5 @@
+/* eslint-disable react/no-array-index-key */
+/* eslint-disable global-require */
 import React, { useState, useEffect } from 'react';
 import { StatusBar, TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
@@ -55,36 +57,36 @@ const Document = ({ navigation }) => {
       <TitleBar>
         <Title>가정통신문</Title>
       </TitleBar>
-      {
-        isLoading ? <LottieView source={require('../../resources/animation/loading.json')} autoPlay loop />
-        : (
-          <ScrollContainer>
-            {documentList.map((data, index) => {
-              return (
-                <TouchableOpacity key={index} onPress={() => navigation.navigate('DocumentViewer', {
-                  title: '가정통신문',
-                  url: data.url
-                })}>
-                  <StyledCard>
-                    <CardItem header>
-                      <Text>
-                        {data.title.replace(/^\s*/, "")}
-                      </Text>
-                    </CardItem>
-                    <CardItem>
-                      <Body>
-                        <Text>
-                          {moment(data.date).format('YYYY년 MM월 DD일')}
-                        </Text>
-                      </Body>
-                    </CardItem>
-                  </StyledCard>
-                </TouchableOpacity>
-              );
-            })}
-          </ScrollContainer>
-        )
-      }
+      {isLoading ? (
+        <LottieView source={require('../../resources/animation/loading.json')} autoPlay loop />
+      ) : (
+        <ScrollContainer>
+          {documentList.map((data, index) => {
+            return (
+              <TouchableOpacity
+                key={index}
+                onPress={() =>
+                  navigation.navigate('DocumentViewer', {
+                    title: '가정통신문',
+                    url: data.url,
+                  })
+                }
+              >
+                <StyledCard>
+                  <CardItem header>
+                    <Text>{data.title.replace(/^\s*/, '')}</Text>
+                  </CardItem>
+                  <CardItem>
+                    <Body>
+                      <Text>{moment(data.date).format('YYYY년 MM월 DD일')}</Text>
+                    </Body>
+                  </CardItem>
+                </StyledCard>
+              </TouchableOpacity>
+            );
+          })}
+        </ScrollContainer>
+      )}
     </Container>
   );
 };
@@ -92,16 +94,16 @@ const Document = ({ navigation }) => {
 const AppNavigator = createStackNavigator(
   {
     Document: {
-      screen: Document
+      screen: Document,
     },
     DocumentViewer: {
-      screen: DocumentViewer
-    }
+      screen: DocumentViewer,
+    },
   },
   {
     defaultNavigationOptions: {
-      header: null
-    }
+      header: null,
+    },
   }
 );
 
