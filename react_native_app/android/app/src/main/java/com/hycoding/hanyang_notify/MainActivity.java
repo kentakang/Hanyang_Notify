@@ -13,7 +13,7 @@ public class MainActivity extends ReactActivity {
      */
     @Override
     protected String getMainComponentName() {
-        return "react_native_app";
+        return "hanyang_notify";
     }
 
     @Override

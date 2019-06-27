@@ -1,4 +1,4 @@
-rootProject.name = 'react_native_app'
+rootProject.name = 'hanyang_notify'
 include ':react-native-webview'
 project(':react-native-webview').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-webview/android')
 include ':lottie-react-native'
