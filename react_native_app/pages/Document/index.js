@@ -1,3 +1,6 @@
+/* eslint-disable no-undef */
+/* eslint-disable react/no-array-index-key */
+/* eslint-disable global-require */
 import React, { useState, useEffect } from 'react';
 import { StatusBar, TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
@@ -5,6 +8,7 @@ import moment from 'moment';
 import LottieView from 'lottie-react-native';
 import { Card, CardItem, Text, Body } from 'native-base';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
+import PropTypes from 'prop-types';
 import DocumentViewer from '../DocumentViewer';
 
 const Container = styled.View`
@@ -55,53 +59,59 @@ const Document = ({ navigation }) => {
       <TitleBar>
         <Title>가정통신문</Title>
       </TitleBar>
-      {
-        isLoading ? <LottieView source={require('../../resources/animation/loading.json')} autoPlay loop />
-        : (
-          <ScrollContainer>
-            {documentList.map((data, index) => {
-              return (
-                <TouchableOpacity key={index} onPress={() => navigation.navigate('DocumentViewer', {
-                  title: '가정통신문',
-                  url: data.url
-                })}>
-                  <StyledCard>
-                    <CardItem header>
-                      <Text>
-                        {data.title.replace(/^\s*/, "")}
-                      </Text>
-                    </CardItem>
-                    <CardItem>
-                      <Body>
-                        <Text>
-                          {moment(data.date).format('YYYY년 MM월 DD일')}
-                        </Text>
-                      </Body>
-                    </CardItem>
-                  </StyledCard>
-                </TouchableOpacity>
-              );
-            })}
-          </ScrollContainer>
-        )
-      }
+      {isLoading ? (
+        <LottieView source={require('../../resources/animation/loading.json')} autoPlay loop />
+      ) : (
+        <ScrollContainer>
+          {documentList.map((data, index) => {
+            return (
+              <TouchableOpacity
+                key={index}
+                onPress={() =>
+                  navigation.navigate('DocumentViewer', {
+                    title: '가정통신문',
+                    url: data.url,
+                  })
+                }
+              >
+                <StyledCard>
+                  <CardItem header>
+                    <Text>{data.title.replace(/^\s*/, '')}</Text>
+                  </CardItem>
+                  <CardItem>
+                    <Body>
+                      <Text>{moment(data.date).format('YYYY년 MM월 DD일')}</Text>
+                    </Body>
+                  </CardItem>
+                </StyledCard>
+              </TouchableOpacity>
+            );
+          })}
+        </ScrollContainer>
+      )}
     </Container>
   );
+};
+
+Document.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 const AppNavigator = createStackNavigator(
   {
     Document: {
-      screen: Document
+      screen: Document,
     },
     DocumentViewer: {
-      screen: DocumentViewer
-    }
+      screen: DocumentViewer,
+    },
   },
   {
     defaultNavigationOptions: {
-      header: null
-    }
+      header: null,
+    },
   }
 );
 

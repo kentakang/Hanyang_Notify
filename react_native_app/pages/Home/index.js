@@ -1,3 +1,5 @@
+/* eslint-disable global-require */
+/* eslint-disable no-undef */
 import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'react-native';
 import styled from 'styled-components/native';
@@ -29,7 +31,7 @@ const Header = styled.Text`
   margin-left: 5%;
   margin-top: 5%;
   font-weight: bold;
-`
+`;
 
 const StyledCard = styled(Card)`
   margin: 5% 5% 0;
@@ -68,70 +70,57 @@ const Home = () => {
       <TitleBar>
         <Title>한양알림이</Title>
       </TitleBar>
-      <Header>
-        {`${date.format('YYYY년 MM월 DD일')}`}
-      </Header>
-      {
-        isLoading ? <LottieView source={require('../../resources/animation/loading.json')} autoPlay loop />
-        : (
-          <Container>
-            <StyledCard>
-              <CardItem header>
-                <Text>점심</Text>
-              </CardItem>
-              <CardItem bordered>
-                <Body>
-                  <Text>
-                    {
-                      mealData[0] !== undefined ? `${mealData[0].food}`
-                      : '급식이 없습니다.'
-                    }
-                  </Text>
-                </Body>
-              </CardItem>
-            </StyledCard>
-            <StyledCard>
-              <CardItem header borderd>
-                <Text>저녁</Text>
-              </CardItem>
-              <CardItem bordered>
-                <Body>
-                  <Text>
-                    {
-                      mealData[1] !== undefined ? `${mealData[1].food}`
-                      : '급식이 없습니다.'
-                    }
-                  </Text>
-                </Body>
-              </CardItem>
-            </StyledCard>
-            <StyledCard>
-              <CardItem header borderd>
-                <Text>학사일정</Text>
-              </CardItem>
-              <CardItem bordered>
-                <Body>
-                  <Text>
-                    {`${scheduleData.schedule}`}
-                  </Text>
-                </Body>
-              </CardItem>
-            </StyledCard>
-            <StyledCard>
-              <CardItem header borderd>
-                <Text>가정통신문</Text>
-              </CardItem>
-              <CardItem bordered>
-                <Body>
-                  <Text>
-                    {`${documentData.title}`}
-                  </Text>
-                </Body>
-              </CardItem>
-            </StyledCard>
-          </Container>
-        )
-      }
+      <Header>{`${date.format('YYYY년 MM월 DD일')}`}</Header>
+      {isLoading ? (
+        <LottieView source={require('../../resources/animation/loading.json')} autoPlay loop />
+      ) : (
+        <Container>
+          <StyledCard>
+            <CardItem header>
+              <Text>점심</Text>
+            </CardItem>
+            <CardItem bordered>
+              <Body>
+                <Text>
+                  {mealData[0] !== undefined ? `${mealData[0].food}` : '급식이 없습니다.'}
+                </Text>
+              </Body>
+            </CardItem>
+          </StyledCard>
+          <StyledCard>
+            <CardItem header borderd>
+              <Text>저녁</Text>
+            </CardItem>
+            <CardItem bordered>
+              <Body>
+                <Text>
+                  {mealData[1] !== undefined ? `${mealData[1].food}` : '급식이 없습니다.'}
+                </Text>
+              </Body>
+            </CardItem>
+          </StyledCard>
+          <StyledCard>
+            <CardItem header borderd>
+              <Text>학사일정</Text>
+            </CardItem>
+            <CardItem bordered>
+              <Body>
+                <Text>{`${scheduleData.schedule}`}</Text>
+              </Body>
+            </CardItem>
+          </StyledCard>
+          <StyledCard>
+            <CardItem header borderd>
+              <Text>가정통신문</Text>
+            </CardItem>
+            <CardItem bordered>
+              <Body>
+                <Text>{`${documentData.title}`}</Text>
+              </Body>
+            </CardItem>
+          </StyledCard>
+        </Container>
+      )}
     </Container>
   );
 };

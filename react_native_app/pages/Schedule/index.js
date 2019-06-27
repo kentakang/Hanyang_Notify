@@ -1,3 +1,6 @@
+/* eslint-disable global-require */
+/* eslint-disable no-undef */
+/* eslint-disable no-loop-func */
 import React, { useState, useEffect } from 'react';
 import { StatusBar, Text } from 'react-native';
 import styled from 'styled-components/native';
@@ -24,14 +27,14 @@ const Title = styled.Text`
 `;
 
 const AgendaItem = styled.View`
-  background: #FFFFFF;
+  background: #ffffff;
   flex: 1;
   border-radius: 5;
   margin-right: 10;
   margin-top: 17;
   justify-content: center;
   align-items: center;
-`
+`;
 
 const EmptyItem = styled.View`
   height: 15;
@@ -41,23 +44,49 @@ const EmptyItem = styled.View`
   align-items: center;
 `;
 
-LocaleConfig.locales['ko'] = {
-  monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
-  monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
-  dayNames: ['일요일', '월요일','화요일','수요일','목요일','금요일','토요일'],
-  dayNamesShort: ['일', '월','화','수','목','금','토'],
-  today: '오늘\'hui'
+LocaleConfig.locales.ko = {
+  monthNames: [
+    '1월',
+    '2월',
+    '3월',
+    '4월',
+    '5월',
+    '6월',
+    '7월',
+    '8월',
+    '9월',
+    '10월',
+    '11월',
+    '12월',
+  ],
+  monthNamesShort: [
+    '1월',
+    '2월',
+    '3월',
+    '4월',
+    '5월',
+    '6월',
+    '7월',
+    '8월',
+    '9월',
+    '10월',
+    '11월',
+    '12월',
+  ],
+  dayNames: ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'],
+  dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
+  today: "오늘'hui",
 };
 
 LocaleConfig.defaultLocale = 'ko';
 
-const Schedule = ({ navigation }) => {
+const Schedule = () => {
   const [scheduleList, setScheduleList] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const date = moment();
   const promiseList = [];
 
-  const renderItem = (item) => (
+  const renderItem = item => (
     <AgendaItem>
       <Text>{item.text}</Text>
     </AgendaItem>
@@ -65,33 +94,42 @@ const Schedule = ({ navigation }) => {
 
   const renderEmptyDate = () => (
     <EmptyItem>
-      <Text>
-        This date is empty!
-      </Text>
+      <Text>This date is empty!</Text>
     </EmptyItem>
-  )
+  );
 
   useEffect(() => {
-    for (let day = 1; day <= date.daysInMonth(); day++) {
-      promiseList.push(new Promise((resolve, reject) => {
-        fetch(`http://hanyang.kentastudio.com/api/schedule/${date.format('YYYY')}-${date.format('MM')}-${day < 10 ? `0${day}` : day}`)
-          .then(response => response.json())
-          .then(json => resolve({ [`${date.format('YYYY')}-${date.format('MM')}-${day < 10 ? `0${day}` : day}`]: [{ text: json.schedule }] }))
-          .catch(error => console.error(error));
-      }));
+    for (let day = 1; day <= date.daysInMonth(); day += 1) {
+      promiseList.push(
+        new Promise(resolve => {
+          fetch(
+            `http://hanyang.kentastudio.com/api/schedule/${date.format('YYYY')}-${date.format(
+              'MM'
+            )}-${day < 10 ? `0${day}` : day}`
+          )
+            .then(response => response.json())
+            .then(json =>
+              resolve({
+                [`${date.format('YYYY')}-${date.format('MM')}-${day < 10 ? `0${day}` : day}`]: [
+                  { text: json.schedule },
+                ],
+              })
+            );
+        })
+      );
     }
 
-    Promise.all(promiseList).then((values) => {
+    Promise.all(promiseList).then(values => {
       setScheduleList(values);
-    })
+    });
   }, []);
 
   useEffect(() => {
     if (scheduleList.length === date.daysInMonth()) {
-      setScheduleList(Object.assign({}, ...(scheduleList.map(item => (item)))))
+      setScheduleList(Object.assign({}, ...scheduleList.map(item => item)));
       setIsLoading(false);
     }
-  }, [scheduleList])
+  }, [scheduleList]);
 
   return (
     <Container>
@@ -99,18 +137,19 @@ const Schedule = ({ navigation }) => {
       <TitleBar>
         <Title>학사일정</Title>
       </TitleBar>
-      {
-        isLoading ? <LottieView source={require('../../resources/animation/loading.json')} autoPlay loop />
-        : (
-          <Agenda
-            selected={date.format('YYYY-MM-DD')}
-            items={scheduleList}
-            renderItem={renderItem}
-            renderEmptyDate={renderEmptyDate}
-            rowHasChanged = {(r1, r2) => { return r1.text !== r2.text }}
-          />
-        )
-      }
+      {isLoading ? (
+        <LottieView source={require('../../resources/animation/loading.json')} autoPlay loop />
+      ) : (
+        <Agenda
+          selected={date.format('YYYY-MM-DD')}
+          items={scheduleList}
+          renderItem={renderItem}
+          renderEmptyDate={renderEmptyDate}
+          rowHasChanged={(r1, r2) => {
+            return r1.text !== r2.text;
+          }}
+        />
+      )}
     </Container>
   );
 };
