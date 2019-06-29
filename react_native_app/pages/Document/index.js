@@ -44,6 +44,12 @@ const StyledCard = styled(Card)`
   margin: 5% 5% 0;
 `;
 
+const ListIcon = styled.Image`
+  width: 16;
+  height: 16;
+  margin-right: 2%;
+`;
+
 const Document = ({ navigation }) => {
   const [documentList, setDocumentList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -84,6 +90,7 @@ const Document = ({ navigation }) => {
               >
                 <StyledCard>
                   <CardItem header>
+                    <ListIcon source={require('../../resources/images/list_icon.png')} />
                     <Text>{data.title.replace(/^\s*/, '')}</Text>
                   </CardItem>
                   <CardItem>
