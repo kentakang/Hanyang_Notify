@@ -51,6 +51,11 @@ const StyledCard = styled(Card)`
   margin: 5% 5% 0;
 `;
 
+const ListIcon = styled.Image`
+  width: 16;
+  height: 16;
+`;
+
 const Meal = () => {
   const date = moment();
   const [mealList, setMealList] = useState([]);
@@ -112,6 +117,8 @@ const Meal = () => {
                 }}
               >
                 <Header>
+                  <ListIcon source={require('../../resources/images/list_icon.png')} />
+                  {'   '}
                   {`${moment(
                     `${date.format('YYYY')}-${date.format('MM')}-${
                       index < 9 ? `0${index + 1}` : `${index + 1}`
