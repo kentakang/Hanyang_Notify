@@ -110,7 +110,7 @@ const Schedule = () => {
       promiseList.push(
         new Promise(resolve => {
           fetch(
-            `http://hanyang.kentastudio.com/api/schedule/${date.format('YYYY')}-${date.format(
+            `https://hanyang.kentastudio.com/api/schedule/${date.format('YYYY')}-${date.format(
               'MM'
             )}-${day < 10 ? `0${day}` : day}`
           )

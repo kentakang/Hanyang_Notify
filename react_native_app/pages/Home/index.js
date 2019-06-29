@@ -58,15 +58,15 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`http://hanyang.kentastudio.com/api/meal/${date.format('YYYY-MM-DD')}`)
+    fetch(`https://hanyang.kentastudio.com/api/meal/${date.format('YYYY-MM-DD')}`)
       .then(response => response.json())
       .then(json => setMealData(json));
 
-    fetch(`http://hanyang.kentastudio.com/api/schedule/${date.format('YYYY-MM-DD')}`)
+    fetch(`https://hanyang.kentastudio.com/api/schedule/${date.format('YYYY-MM-DD')}`)
       .then(response => response.json())
       .then(json => setScheduleData(json));
 
-    fetch('http://hanyang.kentastudio.com/api/document')
+    fetch('https://hanyang.kentastudio.com/api/document')
       .then(response => response.json())
       .then(json => setDocumentData(json));
   }, []);

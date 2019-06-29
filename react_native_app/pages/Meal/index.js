@@ -68,7 +68,7 @@ const Meal = () => {
       promiseList.push(
         new Promise(resolve => {
           fetch(
-            `http://hanyang.kentastudio.com/api/meal/${date.format('YYYY')}-${date.format(
+            `https://hanyang.kentastudio.com/api/meal/${date.format('YYYY')}-${date.format(
               'MM'
             )}-${day}`
           )
