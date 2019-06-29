@@ -91,7 +91,6 @@ const Schedule = () => {
   const [scheduleList, setScheduleList] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const date = moment();
-  const promiseList = [];
 
   const renderItem = item => (
     <AgendaItem>
@@ -106,37 +105,19 @@ const Schedule = () => {
   );
 
   useEffect(() => {
-    for (let day = 1; day <= date.daysInMonth(); day += 1) {
-      promiseList.push(
-        new Promise(resolve => {
-          fetch(
-            `https://hanyang.kentastudio.com/api/schedule/${date.format('YYYY')}-${date.format(
-              'MM'
-            )}-${day < 10 ? `0${day}` : day}`
-          )
-            .then(response => response.json())
-            .then(json =>
-              resolve({
-                [`${date.format('YYYY')}-${date.format('MM')}-${day < 10 ? `0${day}` : day}`]: [
-                  { text: json.schedule },
-                ],
-              })
-            );
-        })
-      );
-    }
-
-    Promise.all(promiseList).then(values => {
-      setScheduleList(values);
-    });
+    fetch(`https://hanyang.kentastudio.com/api/schedule/${date.format('YYYY')}`)
+      .then(response => response.json())
+      .then(json => {
+        json.forEach(data => {
+          setScheduleList(
+            Object.assign(scheduleList, {
+              [`${data.year}-${data.month}-${data.day}`]: [{ text: data.schedule }],
+            })
+          );
+        });
+      })
+      .then(setIsLoading(false));
   }, []);
-
-  useEffect(() => {
-    if (scheduleList.length === date.daysInMonth()) {
-      setScheduleList(Object.assign({}, ...scheduleList.map(item => item)));
-      setIsLoading(false);
-    }
-  }, [scheduleList]);
 
   return (
     <Container>

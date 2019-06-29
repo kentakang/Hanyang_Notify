@@ -63,7 +63,6 @@ const Document = ({ navigation }) => {
   const [page, setPage] = useState(1);
 
   const getPage = () => {
-    console.log('getPage');
     setIsLoading(true);
     fetch(`https://hanyang.kentastudio.com/api/document/list/${page}`)
       .then(response => response.json())
