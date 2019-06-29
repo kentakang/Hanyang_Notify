@@ -50,21 +50,38 @@ const ListIcon = styled.Image`
   margin-right: 2%;
 `;
 
+const LoadIndicator = styled.View`
+  width: 50;
+  height: 50;
+  margin: 5% auto;
+`;
+
 const Document = ({ navigation }) => {
   const [documentList, setDocumentList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [hasMore, setHasMore] = useState(true);
+  const [page, setPage] = useState(1);
+
+  const getPage = () => {
+    console.log('getPage');
+    setIsLoading(true);
+    fetch(`https://hanyang.kentastudio.com/api/document/list/${page}`)
+      .then(response => response.json())
+      .then(json => {
+        setDocumentList(documentList.concat(json.list));
+        setHasMore(json.hasMore);
+        setPage(page + 1);
+        setIsLoading(false);
+      });
+  };
 
   useEffect(() => {
-    fetch('http://hanyang.kentastudio.com/api/document/all')
-      .then(response => response.json())
-      .then(json => setDocumentList(json));
+    getPage();
   }, []);
 
-  useEffect(() => {
-    if (documentList.length !== 0) {
-      setIsLoading(false);
-    }
-  }, [documentList]);
+  const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
+    return layoutMeasurement.height + contentOffset.y >= contentSize.height - 50;
+  };
 
   return (
     <Container>
@@ -73,37 +90,44 @@ const Document = ({ navigation }) => {
         <TitleIcon source={require('../../resources/images/Document.png')} resizeMode="contain" />
         <Title>가정통신문</Title>
       </TitleBar>
-      {isLoading ? (
-        <LottieView source={require('../../resources/animation/loading.json')} autoPlay loop />
-      ) : (
-        <ScrollContainer>
-          {documentList.map((data, index) => {
-            return (
-              <TouchableOpacity
-                key={index}
-                onPress={() =>
-                  navigation.navigate('DocumentViewer', {
-                    title: '가정통신문',
-                    url: data.url,
-                  })
-                }
-              >
-                <StyledCard>
-                  <CardItem header>
-                    <ListIcon source={require('../../resources/images/list_icon.png')} />
-                    <Text>{data.title.replace(/^\s*/, '')}</Text>
-                  </CardItem>
-                  <CardItem>
-                    <Body>
-                      <Text>{moment(data.date).format('YYYY년 MM월 DD일')}</Text>
-                    </Body>
-                  </CardItem>
-                </StyledCard>
-              </TouchableOpacity>
-            );
-          })}
-        </ScrollContainer>
-      )}
+      <ScrollContainer
+        onScroll={({ nativeEvent }) => {
+          if (isCloseToBottom(nativeEvent) && hasMore) {
+            getPage();
+          }
+        }}
+      >
+        {documentList.map((data, index) => {
+          return (
+            <TouchableOpacity
+              key={index}
+              onPress={() =>
+                navigation.navigate('DocumentViewer', {
+                  title: '가정통신문',
+                  url: data.url,
+                })
+              }
+            >
+              <StyledCard>
+                <CardItem header>
+                  <ListIcon source={require('../../resources/images/list_icon.png')} />
+                  <Text>{data.title.replace(/^\s*/, '')}</Text>
+                </CardItem>
+                <CardItem>
+                  <Body>
+                    <Text>{moment(data.date).format('YYYY년 MM월 DD일')}</Text>
+                  </Body>
+                </CardItem>
+              </StyledCard>
+            </TouchableOpacity>
+          );
+        })}
+        {isLoading && (
+          <LoadIndicator>
+            <LottieView source={require('../../resources/animation/loading.json')} autoPlay loop />
+          </LoadIndicator>
+        )}
+      </ScrollContainer>
     </Container>
   );
 };
