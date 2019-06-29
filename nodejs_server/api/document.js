@@ -48,4 +48,22 @@ router.get('/all', (req, res) => {
   });
 });
 
+router.get('/list/:page', (req, res) => {
+  const sql = `SELECT * FROM documentList ORDER BY date DESC LIMIT 20 OFFSET ${(req.params.page
+    - 1)
+    * 20}`;
+
+  client.query(sql, (err, sqlRes) => {
+    if (err) {
+      res.status(500);
+      res.json({ message: err });
+    } else {
+      const sendData = { hasMore: sqlRes.rowCount === 20, list: [] };
+
+      sqlRes.rows.forEach(data => sendData.list.push(data));
+      res.send(sendData);
+    }
+  });
+});
+
 module.exports = router;
