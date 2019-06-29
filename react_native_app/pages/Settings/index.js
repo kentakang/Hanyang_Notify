@@ -40,7 +40,14 @@ const Settings = ({ navigation }) => {
       <TitleBar>
         <Title>설정</Title>
       </TitleBar>
-      <List>
+      <List
+        onPress={() => {
+          navigation.navigate('DocumentViewer', {
+            title: '정보',
+            url: 'https://hycoding.io/static/html/hanyangnotify_about.html',
+          });
+        }}
+      >
         <Left>
           <Icon name="ios-information-circle-outline" size={25} color="#000000" />
           <Text>정보</Text>
