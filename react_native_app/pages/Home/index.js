@@ -44,6 +44,12 @@ const StyledCard = styled(Card)`
   margin: 5% 5% 0;
 `;
 
+const ListIcon = styled.Image`
+  width: 16;
+  height: 16;
+  margin-right: 3%;
+`;
+
 const Home = () => {
   const date = moment();
   const [mealData, setMealData] = useState(null);
@@ -85,6 +91,7 @@ const Home = () => {
         <Container>
           <StyledCard>
             <CardItem header>
+              <ListIcon source={require('../../resources/images/list_icon.png')} />
               <Text>점심</Text>
             </CardItem>
             <CardItem bordered>
@@ -97,6 +104,7 @@ const Home = () => {
           </StyledCard>
           <StyledCard>
             <CardItem header borderd>
+              <ListIcon source={require('../../resources/images/list_icon.png')} />
               <Text>저녁</Text>
             </CardItem>
             <CardItem bordered>
@@ -109,6 +117,7 @@ const Home = () => {
           </StyledCard>
           <StyledCard>
             <CardItem header borderd>
+              <ListIcon source={require('../../resources/images/list_icon.png')} />
               <Text>학사일정</Text>
             </CardItem>
             <CardItem bordered>
@@ -119,6 +128,7 @@ const Home = () => {
           </StyledCard>
           <StyledCard>
             <CardItem header borderd>
+              <ListIcon source={require('../../resources/images/list_icon.png')} />
               <Text>가정통신문</Text>
             </CardItem>
             <CardItem bordered>
