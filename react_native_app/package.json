@@ -7,6 +7,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "jetifier": "^1.6.0",
     "lottie-react-native": "https://github.com/kentakang/lottie-react-native",
     "moment": "^2.24.0",
     "native-base": "^2.12.1",
