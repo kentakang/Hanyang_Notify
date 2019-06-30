@@ -7,6 +7,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "jetifier": "^1.6.0",
     "lottie-react-native": "https://github.com/kentakang/lottie-react-native",
     "moment": "^2.24.0",
     "native-base": "^2.12.1",
@@ -14,6 +15,7 @@
     "react": "16.8.3",
     "react-native": "0.59.9",
     "react-native-calendars": "^1.188.0",
+    "react-native-firebase": "^5.5.4",
     "react-native-gesture-handler": "https://github.com/kentakang/react-native-gesture-handler",
     "react-native-vector-icons": "^6.5.0",
     "react-native-webview": "^6.3.0",

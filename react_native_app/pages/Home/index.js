@@ -6,6 +6,7 @@ import styled from 'styled-components/native';
 import moment from 'moment';
 import LottieView from 'lottie-react-native';
 import { Card, CardItem, Text, Body } from 'native-base';
+import firebase from 'react-native-firebase';
 
 const Container = styled.View`
   flex: 1;
@@ -58,6 +59,8 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    firebase.messaging().subscribeToTopic('ALL');
+
     fetch(`https://hanyang.kentastudio.com/api/meal/${date.format('YYYY-MM-DD')}`)
       .then(response => response.json())
       .then(json => setMealData(json));

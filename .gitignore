@@ -3,3 +3,4 @@ react_native_app/android/app/release/app-release.apk
 react_native_app/android/app/release/output.json
 private_key.pepk
 react_native_app/android/app/release/app.aab
+react_native_app/android/app/google-services.json
