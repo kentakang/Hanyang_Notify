@@ -1,9 +1,11 @@
+/* eslint-disable global-require */
 import React, { useEffect } from 'react';
-import { StatusBar, Alert, Platform } from 'react-native';
+import { StatusBar, Alert } from 'react-native';
 import styled from 'styled-components/native';
 import LottieView from 'lottie-react-native';
 import { WebView } from 'react-native-webview';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import PropTypes from 'prop-types';
 
 const Container = styled.View`
   flex: 1;
@@ -26,10 +28,9 @@ const Title = styled.Text`
 
 const BackButton = styled.TouchableOpacity`
   margin-left: 5%;
-`
+`;
 
 const DocumentViewer = ({ navigation }) => {
-
   useEffect(() => {
     if (navigation.getParam('url', null) === null) {
       Alert.alert(
@@ -38,10 +39,10 @@ const DocumentViewer = ({ navigation }) => {
         [
           {
             text: '확인',
-            onPress: () => navigation.goBack()
-          }
+            onPress: () => navigation.goBack(),
+          },
         ]
-      )
+      );
     }
   }, []);
 
@@ -54,14 +55,23 @@ const DocumentViewer = ({ navigation }) => {
         </BackButton>
         <Title>{navigation.getParam('title', 'Document Viewer')}</Title>
       </TitleBar>
-      <WebView 
-        source={{ uri: navigation.getParam('url', null) }} 
-        startInLoadingState={true} 
-        renderLoading={() => <LottieView source={require('../../resources/animation/loading.json')} autoPlay loop />} 
+      <WebView
+        source={{ uri: navigation.getParam('url', null) }}
+        startInLoadingState
+        renderLoading={() => (
+          <LottieView source={require('../../resources/animation/loading.json')} autoPlay loop />
+        )}
         scalesPageToFit={false}
       />
     </Container>
   );
+};
+
+DocumentViewer.propTypes = {
+  navigation: PropTypes.shape({
+    goBack: PropTypes.func.isRequired,
+    getParam: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 export default DocumentViewer;

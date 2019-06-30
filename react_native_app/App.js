@@ -9,17 +9,17 @@ import Settings from './pages/Settings';
 
 const Navigator = createBottomTabNavigator(
   {
-    Home: Home,
-    Meal: Meal,
-    Document: Document,
-    Schedule: Schedule,
-    Settings: Settings
+    Home,
+    Meal,
+    Document,
+    Schedule,
+    Settings,
   },
   {
     defaultNavigationOptions: ({ navigation }) => ({
       tabBarIcon: ({ focused, horizontal, tintColor }) => {
         const { routeName } = navigation.state;
-        let IconComponent = Ionicons;
+        const IconComponent = Ionicons;
         let iconName;
 
         switch (routeName) {
@@ -38,14 +38,16 @@ const Navigator = createBottomTabNavigator(
           case 'Settings':
             iconName = 'ios-settings';
             break;
+          default:
+            break;
         }
 
         return <IconComponent name={iconName} size={25} color={tintColor} />;
       },
     }),
     tabBarOptions: {
-      activeTintColor: '#007ac1'
-    }
+      activeTintColor: '#007ac1',
+    },
   }
 );
 
