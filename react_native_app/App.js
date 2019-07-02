@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createBottomTabNavigator, createAppContainer } from 'react-navigation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import SplashScreen from 'react-native-splash-screen';
 import Home from './pages/Home';
 import Meal from './pages/Meal';
 import Document from './pages/Document';
@@ -51,4 +52,16 @@ const Navigator = createBottomTabNavigator(
   }
 );
 
-export default createAppContainer(Navigator);
+const AppContainer = createAppContainer(Navigator);
+
+const App = () => {
+  useEffect(() => {
+    setTimeout(() => {
+      SplashScreen.hide();
+    }, 1000);
+  }, []);
+
+  return <AppContainer />;
+};
+
+export default App;
