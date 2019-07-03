@@ -1,15 +1,18 @@
 const MEAL_LIST = [];
 const DOCUMENT_LIST = [];
 const SCHEDULE_LIST = [];
+const NOTICE_LIST = [];
 
 export const setMealList = mealList => ({ type: MEAL_LIST, mealList });
 export const setDocumentList = documentList => ({ type: DOCUMENT_LIST, documentList });
 export const setScheduleList = scheduleList => ({ type: SCHEDULE_LIST, scheduleList });
+export const setNoticeList = noticeList => ({ type: NOTICE_LIST, noticeList });
 
 const initialState = {
   mealList: {},
   documentList: [],
   scheduleList: {},
+  noticeList: [],
 };
 
 const reducer = (state = initialState, action) => {
@@ -29,6 +32,11 @@ const reducer = (state = initialState, action) => {
         ...state,
         scheduleList: action.scheduleList,
       };
+    case NOTICE_LIST:
+      return {
+        ...state,
+        noticeList: action.noticeList,
+      };
     default:
       return state;
   }
@@ -38,6 +46,7 @@ const actionCreators = {
   setMealList,
   setDocumentList,
   setScheduleList,
+  setNoticeList,
 };
 
 export { actionCreators };
