@@ -1,8 +1,8 @@
 <resources>
-
-    <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
     </style>
-
+    <style name="SplashScreenTheme" parent="SplashScreen_SplashTheme">
+        <item name="colorPrimaryDark">#002d52</item>
+    </style>
 </resources>

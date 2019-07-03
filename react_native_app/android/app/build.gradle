@@ -123,6 +123,10 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
     // applicationVariants are e.g. debug, release
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
@@ -139,6 +143,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-splash-screen')
     implementation project(':react-native-firebase')
     implementation project(':react-native-webview')
     implementation project(':lottie-react-native')

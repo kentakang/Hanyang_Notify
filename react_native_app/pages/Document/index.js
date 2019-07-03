@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable global-require */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { StatusBar, TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
 import moment from 'moment';
@@ -9,7 +9,10 @@ import LottieView from 'lottie-react-native';
 import { Card, CardItem, Text, Body } from 'native-base';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 import PropTypes from 'prop-types';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import DocumentViewer from '../DocumentViewer';
+import { actionCreators as actions } from '../../reducer';
 
 const Container = styled.View`
   flex: 1;
@@ -56,11 +59,24 @@ const LoadIndicator = styled.View`
   margin: 5% auto;
 `;
 
-const Document = ({ navigation }) => {
-  const [documentList, setDocumentList] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+const mapStateToProps = state => {
+  const { documentList } = state;
+
+  return {
+    documentList,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    setDocumentList: bindActionCreators(actions.setDocumentList, dispatch),
+  };
+};
+
+const Document = ({ navigation, documentList, setDocumentList }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(2);
 
   const getPage = () => {
     setIsLoading(true);
@@ -73,10 +89,6 @@ const Document = ({ navigation }) => {
         setIsLoading(false);
       });
   };
-
-  useEffect(() => {
-    getPage();
-  }, []);
 
   const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
     return layoutMeasurement.height + contentOffset.y >= contentSize.height - 50;
@@ -140,7 +152,10 @@ Document.propTypes = {
 const AppNavigator = createStackNavigator(
   {
     Document: {
-      screen: Document,
+      screen: connect(
+        mapStateToProps,
+        mapDispatchToProps
+      )(Document),
     },
     DocumentViewer: {
       screen: DocumentViewer,

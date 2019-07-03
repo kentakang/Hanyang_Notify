@@ -1,12 +1,13 @@
 /* eslint-disable global-require */
 /* eslint-disable no-undef */
 /* eslint-disable no-loop-func */
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { StatusBar, Text } from 'react-native';
 import styled from 'styled-components/native';
 import moment from 'moment';
 import LottieView from 'lottie-react-native';
 import { Agenda, LocaleConfig } from 'react-native-calendars';
+import { connect } from 'react-redux';
 
 const Container = styled.View`
   flex: 1;
@@ -87,9 +88,15 @@ LocaleConfig.locales.ko = {
 
 LocaleConfig.defaultLocale = 'ko';
 
-const Schedule = () => {
-  const [scheduleList, setScheduleList] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
+const mapStateToProps = state => {
+  const { scheduleList } = state;
+
+  return {
+    scheduleList,
+  };
+};
+
+const Schedule = ({ scheduleList }) => {
   const date = moment();
 
   const renderItem = item => (
@@ -104,21 +111,6 @@ const Schedule = () => {
     </EmptyItem>
   );
 
-  useEffect(() => {
-    fetch(`https://hanyang.kentastudio.com/api/schedule/${date.format('YYYY')}`)
-      .then(response => response.json())
-      .then(json => {
-        json.forEach(data => {
-          setScheduleList(
-            Object.assign(scheduleList, {
-              [`${data.year}-${data.month}-${data.day}`]: [{ text: data.schedule }],
-            })
-          );
-        });
-      })
-      .then(setIsLoading(false));
-  }, []);
-
   return (
     <Container>
       <StatusBar backgroundColor="#007ac1" barStyle="light-content" />
@@ -126,19 +118,15 @@ const Schedule = () => {
         <TitleIcon source={require('../../resources/images/Schedule.png')} resizeMode="contain" />
         <Title>학사일정</Title>
       </TitleBar>
-      {isLoading ? (
-        <LottieView source={require('../../resources/animation/loading.json')} autoPlay loop />
-      ) : (
-        <Agenda
-          selected={date.format('YYYY-MM-DD')}
-          items={scheduleList}
-          renderItem={renderItem}
-          renderEmptyDate={renderEmptyDate}
-          rowHasChanged={(r1, r2) => {
-            return r1.text !== r2.text;
-          }}
-        />
-      )}
+      <Agenda
+        selected={date.format('YYYY-MM-DD')}
+        items={scheduleList}
+        renderItem={renderItem}
+        renderEmptyDate={renderEmptyDate}
+        rowHasChanged={(r1, r2) => {
+          return r1.text !== r2.text;
+        }}
+      />
     </Container>
   );
 };
@@ -149,4 +137,4 @@ Schedule.navigationOptions = () => {
   };
 };
 
-export default Schedule;
+export default connect(mapStateToProps)(Schedule);

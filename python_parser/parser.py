@@ -9,6 +9,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import psycopg2
 import time
+import sys
 
 # DB 설정
 conn = None
@@ -16,8 +17,9 @@ dbUser = ""
 dbPassword = ""
 dbName = ""
 
-year = str(datetime.today().year)
-month = datetime.today().strftime("%m")
+if len(sys.argv) > 3:
+    year = sys.argv[2]
+    month = sys.argv[3]
 
 # 급식 파싱
 def get_meal():
@@ -38,43 +40,48 @@ def get_meal():
 
     sql = "INSERT INTO mealList(year, month, day, type, food) VALUES (%s, %s, %s, %s, %s);"
     countSQL = "SELECT COUNT(*) FROM mealList WHERE year = %s and month = %s"
+    deleteSQL = "DELETE FROM mealList WHERE year = %s and month = %s and day = %s"
 
     try:
         with psycopg2.connect("host=localhost dbname={0} user={1} password={2}".format(dbName, dbUser, dbPassword)) as conn:
             with conn.cursor() as cursor:
                 cursor.execute(countSQL, (year, month))
-                if cursor.fetchone()[0] == 0:
-                    for i in dayTable:
-                        day = re.findall("\\d+", i.get_text())
-                        meal = re.findall("[가-힣]+", i.get_text())
+                length = cursor.fetchone()[0]
 
-                        if (len(day) > 0):
-                            x = 0
-                            food = ""
-                            isDinner = False
+                for i in dayTable:
+                    day = re.findall("\\d+", i.get_text())
+                    meal = re.findall("[가-힣]+", i.get_text())
 
-                            for j in meal:
-                                if j == "석식":
-                                    print(food)
+                    print(length)
+
+                    if length != 0:
+                        if len(day) > 0:
+                            cursor.execute(deleteSQL, (year, month, day[0]))
+
+                    if (len(day) > 0):
+                        x = 0
+                        food = ""
+                        isDinner = False
+
+                        for j in meal:
+                            if j == "석식":
+                                print(food)
+                                cursor.execute(sql, (year, month, day[0], 'lunch', food))
+                                isDinner = True
+                                food = ""
+                            elif j == "중식":
+                                print("중식")
+                            else:
+                                food += j + ","
+
+                            if x + 1 == len(meal):
+                                print(food)
+                                if (isDinner):
+                                    cursor.execute(sql, (year, month, day[0], 'dinner', food))
+                                else:
                                     cursor.execute(sql, (year, month, day[0], 'lunch', food))
-                                    isDinner = True
-                                    food = ""
-                                elif j == "중식":
-                                    print("중식")
-                                else:
-                                    food += j + ","
-
-                                if x + 1 == len(meal):
-                                    print(food)
-                                    if (isDinner):
-                                        cursor.execute(sql, (year, month, day[0], 'dinner', food))
-                                    else:
-                                        cursor.execute(sql, (year, month, day[0], 'lunch', food))
-                                else:
-                                    x += 1
-
-    except Exception as exception:
-        print(exception)
+                            else:
+                                x += 1
     finally:
         if conn:
             conn.close()
@@ -166,6 +173,18 @@ def get_document():
 
         idx += 1
 
-get_document()
-get_meal()
-get_schedule()
+if len(sys.argv) > 1:
+    if sys.argv[1] == 'meal':
+        get_meal()
+    elif sys.argv[1] == 'document':
+        get_document()
+    elif sys.argv[1] == 'schedule':
+        get_schedule()
+    else:
+        get_document()
+        get_meal()
+        get_schedule()
+else:
+    get_document()
+    get_meal()
+    get_schedule()
