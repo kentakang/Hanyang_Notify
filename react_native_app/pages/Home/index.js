@@ -80,7 +80,7 @@ const Home = ({ mealList, scheduleList, documentList }) => {
       <Container>
         <StyledCard>
           <CardItem header>
-            <ListIcon source={require('../../resources/images/list_icon.png')} />
+            <ListIcon source={require('../../resources/images/list_icon_2.png')} />
             <Text>점심</Text>
           </CardItem>
           <CardItem bordered>
@@ -95,7 +95,7 @@ const Home = ({ mealList, scheduleList, documentList }) => {
         </StyledCard>
         <StyledCard>
           <CardItem header borderd>
-            <ListIcon source={require('../../resources/images/list_icon.png')} />
+            <ListIcon source={require('../../resources/images/list_icon_2.png')} />
             <Text>저녁</Text>
           </CardItem>
           <CardItem bordered>
@@ -110,7 +110,7 @@ const Home = ({ mealList, scheduleList, documentList }) => {
         </StyledCard>
         <StyledCard>
           <CardItem header borderd>
-            <ListIcon source={require('../../resources/images/list_icon.png')} />
+            <ListIcon source={require('../../resources/images/list_icon_2.png')} />
             <Text>학사일정</Text>
           </CardItem>
           <CardItem bordered>
@@ -125,7 +125,7 @@ const Home = ({ mealList, scheduleList, documentList }) => {
         </StyledCard>
         <StyledCard>
           <CardItem header borderd>
-            <ListIcon source={require('../../resources/images/list_icon.png')} />
+            <ListIcon source={require('../../resources/images/list_icon_2.png')} />
             <Text>가정통신문</Text>
           </CardItem>
           <CardItem bordered>
