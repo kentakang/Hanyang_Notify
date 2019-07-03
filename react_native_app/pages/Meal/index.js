@@ -7,7 +7,6 @@ import { StatusBar, View } from 'react-native';
 import styled from 'styled-components/native';
 import moment from 'moment';
 import 'moment/locale/ko';
-import LottieView from 'lottie-react-native';
 import { Card, CardItem, Text, Body } from 'native-base';
 import { connect } from 'react-redux';
 
