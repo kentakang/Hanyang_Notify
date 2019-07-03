@@ -99,7 +99,7 @@ const Notice = ({ navigation, noticeList, setNoticeList }) => {
     <Container>
       <StatusBar backgroundColor="#007ac1" barStyle="light-content" />
       <TitleBar>
-        <TitleIcon source={require('../../resources/images/Document.png')} resizeMode="contain" />
+        <TitleIcon source={require('../../resources/images/Notice.png')} resizeMode="contain" />
         <Title>공지사항</Title>
       </TitleBar>
       <ScrollContainer

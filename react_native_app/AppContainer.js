@@ -67,7 +67,7 @@ const Navigator = createBottomTabNavigator(
             iconName = 'ios-settings';
             break;
           case 'Notice':
-            iconName = 'ios-archive';
+            iconName = 'ios-notifications';
             break;
           default:
             break;
