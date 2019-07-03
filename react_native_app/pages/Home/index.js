@@ -1,10 +1,9 @@
 /* eslint-disable global-require */
 /* eslint-disable no-undef */
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { StatusBar } from 'react-native';
 import styled from 'styled-components/native';
 import moment from 'moment';
-import LottieView from 'lottie-react-native';
 import { Card, CardItem, Text, Body } from 'native-base';
 import firebase from 'react-native-firebase';
 import { connect } from 'react-redux';
