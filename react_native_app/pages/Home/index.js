@@ -1,7 +1,7 @@
 /* eslint-disable global-require */
 /* eslint-disable no-undef */
 import React, { useEffect } from 'react';
-import { StatusBar } from 'react-native';
+import { StatusBar, ScrollView } from 'react-native';
 import styled from 'styled-components/native';
 import moment from 'moment';
 import { Card, CardItem, Text, Body } from 'native-base';
@@ -52,16 +52,17 @@ const ListIcon = styled.Image`
 `;
 
 const mapStateToProps = state => {
-  const { mealList, documentList, scheduleList } = state;
+  const { mealList, documentList, scheduleList, noticeList } = state;
 
   return {
     mealList,
     documentList,
     scheduleList,
+    noticeList,
   };
 };
 
-const Home = ({ mealList, scheduleList, documentList }) => {
+const Home = ({ mealList, scheduleList, documentList, noticeList }) => {
   const date = moment();
   const formattedDate = date.format('YYYY-MM-DD');
 
@@ -76,69 +77,86 @@ const Home = ({ mealList, scheduleList, documentList }) => {
         <TitleIcon source={require('../../resources/images/Home.png')} resizeMode="contain" />
         <Title>한양알림이</Title>
       </TitleBar>
-      <Header>{`${date.format('YYYY년 MM월 DD일')}`}</Header>
-      <Container>
-        <StyledCard>
-          <CardItem header>
-            <ListIcon source={require('../../resources/images/list_icon_2.png')} />
-            <Text>점심</Text>
-          </CardItem>
-          <CardItem bordered>
-            <Body>
-              <Text>
-                {mealList[formattedDate] !== undefined
-                  ? `${mealList[formattedDate].lunch}`
-                  : '급식이 없습니다.'}
-              </Text>
-            </Body>
-          </CardItem>
-        </StyledCard>
-        <StyledCard>
-          <CardItem header borderd>
-            <ListIcon source={require('../../resources/images/list_icon_2.png')} />
-            <Text>저녁</Text>
-          </CardItem>
-          <CardItem bordered>
-            <Body>
-              <Text>
-                {mealList[formattedDate] !== undefined
-                  ? `${mealList[formattedDate].dinner}`
-                  : '급식이 없습니다.'}
-              </Text>
-            </Body>
-          </CardItem>
-        </StyledCard>
-        <StyledCard>
-          <CardItem header borderd>
-            <ListIcon source={require('../../resources/images/list_icon_2.png')} />
-            <Text>학사일정</Text>
-          </CardItem>
-          <CardItem bordered>
-            <Body>
-              <Text>
-                {scheduleList[formattedDate] !== undefined
-                  ? `${scheduleList[formattedDate][0].text}`
-                  : '학사 일정이 없습니다.'}
-              </Text>
-            </Body>
-          </CardItem>
-        </StyledCard>
-        <StyledCard>
-          <CardItem header borderd>
-            <ListIcon source={require('../../resources/images/list_icon_2.png')} />
-            <Text>가정통신문</Text>
-          </CardItem>
-          <CardItem bordered>
-            <Body>
-              <Text>
-                {documentList !== undefined && documentList.length > 1
-                  ? `${documentList[0].title}`
-                  : '가정통신문이 없습니다.'}
-              </Text>
-            </Body>
-          </CardItem>
-        </StyledCard>
-      </Container>
+      <ScrollView style={{ flex: 1 }}>
+        <Header>{`${date.format('YYYY년 MM월 DD일')}`}</Header>
+        <Container>
+          <StyledCard>
+            <CardItem header>
+              <ListIcon source={require('../../resources/images/list_icon_2.png')} />
+              <Text>점심</Text>
+            </CardItem>
+            <CardItem bordered>
+              <Body>
+                <Text>
+                  {mealList[formattedDate] !== undefined
+                    ? `${mealList[formattedDate].lunch}`
+                    : '급식이 없습니다.'}
+                </Text>
+              </Body>
+            </CardItem>
+          </StyledCard>
+          <StyledCard>
+            <CardItem header borderd>
+              <ListIcon source={require('../../resources/images/list_icon_2.png')} />
+              <Text>저녁</Text>
+            </CardItem>
+            <CardItem bordered>
+              <Body>
+                <Text>
+                  {mealList[formattedDate] !== undefined
+                    ? `${mealList[formattedDate].dinner}`
+                    : '급식이 없습니다.'}
+                </Text>
+              </Body>
+            </CardItem>
+          </StyledCard>
+          <StyledCard>
+            <CardItem header borderd>
+              <ListIcon source={require('../../resources/images/list_icon_2.png')} />
+              <Text>공지사항</Text>
+            </CardItem>
+            <CardItem bordered>
+              <Body>
+                <Text>
+                  {noticeList !== undefined && noticeList.length > 1
+                    ? `${noticeList[0].title}`
+                    : '공지사항이 없습니다.'}
+                </Text>
+              </Body>
+            </CardItem>
+          </StyledCard>
+          <StyledCard>
+            <CardItem header borderd>
+              <ListIcon source={require('../../resources/images/list_icon_2.png')} />
+              <Text>학사일정</Text>
+            </CardItem>
+            <CardItem bordered>
+              <Body>
+                <Text>
+                  {scheduleList[formattedDate] !== undefined
+                    ? `${scheduleList[formattedDate][0].text}`
+                    : '학사 일정이 없습니다.'}
+                </Text>
+              </Body>
+            </CardItem>
+          </StyledCard>
+          <StyledCard>
+            <CardItem header borderd>
+              <ListIcon source={require('../../resources/images/list_icon_2.png')} />
+              <Text>가정통신문</Text>
+            </CardItem>
+            <CardItem bordered>
+              <Body>
+                <Text>
+                  {documentList !== undefined && documentList.length > 1
+                    ? `${documentList[0].title}`
+                    : '가정통신문이 없습니다.'}
+                </Text>
+              </Body>
+            </CardItem>
+          </StyledCard>
+        </Container>
+      </ScrollView>
     </Container>
   );
 };
