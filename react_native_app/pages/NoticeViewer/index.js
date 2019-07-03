@@ -5,6 +5,8 @@ import styled from 'styled-components/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import PropTypes from 'prop-types';
 import HTML from 'react-native-render-html';
+import WebView from 'react-native-webview';
+import { IGNORED_TAGS, alterNode, makeTableRenderer } from 'react-native-render-html-table-bridge'; 
 
 const Container = styled.View`
   flex: 1;
@@ -71,6 +73,19 @@ const BackButton = styled.TouchableOpacity`
   margin-left: 5%;
 `;
 
+const config = {
+  WebViewComponent: WebView
+};
+
+const renderers = {
+  table: makeTableRenderer(config)
+};
+
+const htmlConfig = {
+  alterNode,
+  renderers,
+};
+
 const NoticeViewer = ({ navigation }) => {
   useEffect(() => {
     if (navigation.getParam('content', null) === null) {
@@ -105,13 +120,14 @@ const NoticeViewer = ({ navigation }) => {
             'line-height',
             'letter-spacing',
           ]}
-          ignoredTags={['br']}
+          ignoredTags={['br', ...IGNORED_TAGS]}
           baseFontStyle={{ fontSize: 14, fontWeight: 'normal', color: '#4c4c4c' }}
           tagsStyles={{
             p: { lineHeight: 14 },
           }}
           allowFontScaling
           textSelectable
+          {...htmlConfig}
         />
         {navigation.getParam('attachment') !== null && (
           <NoticeAttachmentContainer>
