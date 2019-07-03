@@ -170,9 +170,17 @@ const AppNavigator = createStackNavigator(
 
 const AppContainer = createAppContainer(AppNavigator);
 
-AppContainer.navigationOptions = () => {
+AppContainer.navigationOptions = ({ navigation }) => {
+  const { routeName } = navigation.state.routes[navigation.state.index];
+  let tabBarVisible = true;
+
+  if (routeName === 'DocumentViewer') {
+    tabBarVisible = false;
+  }
+
   return {
     title: '가정통신문',
+    tabBarVisible,
   };
 };
 

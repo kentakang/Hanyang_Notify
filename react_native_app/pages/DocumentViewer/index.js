@@ -61,7 +61,7 @@ const DocumentViewer = ({ navigation }) => {
         renderLoading={() => (
           <LottieView source={require('../../resources/animation/loading.json')} autoPlay loop />
         )}
-        scalesPageToFit={false}
+        scalesPageToFit
       />
     </Container>
   );
