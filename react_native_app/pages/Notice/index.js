@@ -11,6 +11,7 @@ import { createStackNavigator, createAppContainer } from 'react-navigation';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import NoticeViewer from '../NoticeViewer';
 import DocumentViewer from '../DocumentViewer';
 import { actionCreators as actions } from '../../reducer';
 
@@ -60,30 +61,30 @@ const LoadIndicator = styled.View`
 `;
 
 const mapStateToProps = state => {
-  const { documentList } = state;
+  const { noticeList } = state;
 
   return {
-    documentList,
+    noticeList,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    setDocumentList: bindActionCreators(actions.setDocumentList, dispatch),
+    setNoticeList: bindActionCreators(actions.setNoticeList, dispatch),
   };
 };
 
-const Document = ({ navigation, documentList, setDocumentList }) => {
+const Notice = ({ navigation, noticeList, setNoticeList }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(2);
 
   const getPage = () => {
     setIsLoading(true);
-    fetch(`https://hanyang.kentastudio.com/api/document/list/${page}`)
+    fetch(`https://hanyang.kentastudio.com/api/notice/list/${page}`)
       .then(response => response.json())
       .then(json => {
-        setDocumentList(documentList.concat(json.list));
+        setNoticeList(noticeList.concat(json.list));
         setHasMore(json.hasMore);
         setPage(page + 1);
         setIsLoading(false);
@@ -99,7 +100,7 @@ const Document = ({ navigation, documentList, setDocumentList }) => {
       <StatusBar backgroundColor="#007ac1" barStyle="light-content" />
       <TitleBar>
         <TitleIcon source={require('../../resources/images/Document.png')} resizeMode="contain" />
-        <Title>가정통신문</Title>
+        <Title>공지사항</Title>
       </TitleBar>
       <ScrollContainer
         onScroll={({ nativeEvent }) => {
@@ -108,21 +109,27 @@ const Document = ({ navigation, documentList, setDocumentList }) => {
           }
         }}
       >
-        {documentList.map((data, index) => {
+        {noticeList.map((data, index) => {
           return (
             <TouchableOpacity
               key={index}
               onPress={() =>
-                navigation.navigate('DocumentViewer', {
-                  title: '가정통신문',
-                  url: data.url,
+                navigation.navigate('NoticeViewer', {
+                  title: data.title.replace(/\t/g, '').replace(/\n/g, ''),
+                  content: data.content,
+                  attachment: data.attachment ? data.attachment : null,
                 })
               }
             >
               <StyledCard>
                 <CardItem header>
                   <ListIcon source={require('../../resources/images/list_icon.png')} />
-                  <Text>{data.title.replace(/^\s*/, '')}</Text>
+                  <Text>
+                    {data.title
+                      .replace(/^\s*/, '')
+                      .replace(/\t/g, '')
+                      .replace(/\n/g, '')}
+                  </Text>
                 </CardItem>
                 <CardItem>
                   <Body>
@@ -143,7 +150,7 @@ const Document = ({ navigation, documentList, setDocumentList }) => {
   );
 };
 
-Document.propTypes = {
+Notice.propTypes = {
   navigation: PropTypes.shape({
     navigate: PropTypes.func.isRequired,
   }).isRequired,
@@ -151,11 +158,14 @@ Document.propTypes = {
 
 const AppNavigator = createStackNavigator(
   {
-    Document: {
+    Notice: {
       screen: connect(
         mapStateToProps,
         mapDispatchToProps
-      )(Document),
+      )(Notice),
+    },
+    NoticeViewer: {
+      screen: NoticeViewer,
     },
     DocumentViewer: {
       screen: DocumentViewer,
@@ -174,12 +184,12 @@ AppContainer.navigationOptions = ({ navigation }) => {
   const { routeName } = navigation.state.routes[navigation.state.index];
   let tabBarVisible = true;
 
-  if (routeName === 'DocumentViewer') {
+  if (routeName !== 'Notice') {
     tabBarVisible = false;
   }
 
   return {
-    title: '가정통신문',
+    title: '공지사항',
     tabBarVisible,
   };
 };

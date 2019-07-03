@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
+    "test": "jest",
+    "remotedev": "remotedev --hostname=localhost --port=8000"
   },
   "dependencies": {
     "jetifier": "^1.6.0",
@@ -17,9 +18,13 @@
     "react-native-calendars": "^1.188.0",
     "react-native-firebase": "^5.5.4",
     "react-native-gesture-handler": "https://github.com/kentakang/react-native-gesture-handler",
+    "react-native-render-html": "^4.1.2",
+    "react-native-splash-screen": "^3.2.0",
     "react-native-vector-icons": "^6.5.0",
     "react-native-webview": "^6.3.0",
     "react-navigation": "^3.11.0",
+    "react-redux": "^7.1.0",
+    "redux": "^4.0.1",
     "styled-components": "^4.3.2"
   },
   "devDependencies": {
@@ -37,7 +42,9 @@
     "jest": "^24.8.0",
     "metro-react-native-babel-preset": "^0.54.1",
     "prettier": "^1.18.2",
-    "react-test-renderer": "16.8.3"
+    "react-test-renderer": "16.8.3",
+    "remote-redux-devtools": "^0.5.16",
+    "remotedev-server": "^0.3.1"
   },
   "jest": {
     "preset": "react-native"

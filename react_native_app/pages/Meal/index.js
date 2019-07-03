@@ -2,13 +2,13 @@
 /* eslint-disable no-loop-func */
 /* eslint-disable no-plusplus */
 /* eslint-disable global-require */
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { StatusBar, View } from 'react-native';
 import styled from 'styled-components/native';
 import moment from 'moment';
 import 'moment/locale/ko';
-import LottieView from 'lottie-react-native';
 import { Card, CardItem, Text, Body } from 'native-base';
+import { connect } from 'react-redux';
 
 const Container = styled.View`
   flex: 1;
@@ -56,38 +56,19 @@ const ListIcon = styled.Image`
   height: 16;
 `;
 
-const Meal = () => {
+const mapStateToProps = state => {
+  const { mealList, documentList, scheduleList } = state;
+
+  return {
+    mealList,
+    documentList,
+    scheduleList,
+  };
+};
+
+const Meal = ({ mealList }) => {
   const date = moment();
-  const [mealList, setMealList] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const promiseList = [];
   const scrollView = useRef(null);
-
-  useEffect(() => {
-    for (let day = 1; day <= date.daysInMonth(); day++) {
-      promiseList.push(
-        new Promise(resolve => {
-          fetch(
-            `https://hanyang.kentastudio.com/api/meal/${date.format('YYYY')}-${date.format(
-              'MM'
-            )}-${day}`
-          )
-            .then(response => response.json())
-            .then(json => resolve(json));
-        })
-      );
-    }
-
-    Promise.all(promiseList).then(values => {
-      setMealList(values);
-    });
-  }, []);
-
-  useEffect(() => {
-    if (mealList.length === date.daysInMonth()) {
-      setIsLoading(false);
-    }
-  }, [mealList]);
 
   moment.locale('ko');
 
@@ -98,58 +79,48 @@ const Meal = () => {
         <TitleIcon source={require('../../resources/images/Meal.png')} resizeMode="contain" />
         <Title>급식</Title>
       </TitleBar>
-      {isLoading ? (
-        <LottieView source={require('../../resources/animation/loading.json')} autoPlay loop />
-      ) : (
-        <ScrollContainer ref={scrollView}>
-          {mealList.map((data, index) => {
-            return (
-              <View
-                key={`${date.format('YYYY')}-${date.format('MM')}-${
-                  index < 9 ? `0${index + 1}` : `${index + 1}`
-                }`}
-                onLayout={event => {
-                  if (index === date.format('DD') - 1) {
-                    const { x, y } = event.nativeEvent.layout;
+      <ScrollContainer ref={scrollView}>
+        {Object.entries(mealList).map(([key, data]) => {
+          return (
+            <View
+              key={key}
+              onLayout={event => {
+                if (key === date.format('YYYY-MM-DD') - 1) {
+                  const { x, y } = event.nativeEvent.layout;
 
-                    scrollView.current.scrollTo({ x, y, animated: true });
-                  }
-                }}
-              >
-                <Header>
-                  <ListIcon source={require('../../resources/images/list_icon.png')} />
-                  {'   '}
-                  {`${moment(
-                    `${date.format('YYYY')}-${date.format('MM')}-${
-                      index < 9 ? `0${index + 1}` : `${index + 1}`
-                    }`
-                  ).format('MM월 DD일 (ddd)')}`}
-                </Header>
-                <StyledCard>
-                  <CardItem header>
-                    <Text>점심</Text>
-                  </CardItem>
-                  <CardItem bordered>
-                    <Body>
-                      <Text>{data[0] !== undefined ? `${data[0].food}` : '급식이 없습니다.'}</Text>
-                    </Body>
-                  </CardItem>
-                </StyledCard>
-                <StyledCard>
-                  <CardItem header borderd>
-                    <Text>저녁</Text>
-                  </CardItem>
-                  <CardItem bordered>
-                    <Body>
-                      <Text>{data[1] !== undefined ? `${data[1].food}` : '급식이 없습니다.'}</Text>
-                    </Body>
-                  </CardItem>
-                </StyledCard>
-              </View>
-            );
-          })}
-        </ScrollContainer>
-      )}
+                  scrollView.current.scrollTo({ x, y, animated: true });
+                }
+              }}
+            >
+              <Header>
+                <ListIcon source={require('../../resources/images/list_icon.png')} />
+                {'   '}
+                {`${moment(key).format('MM월 DD일 (ddd)')}`}
+              </Header>
+              <StyledCard>
+                <CardItem header>
+                  <Text>점심</Text>
+                </CardItem>
+                <CardItem bordered>
+                  <Body>
+                    <Text>{data.lunch !== undefined ? `${data.lunch}` : '급식이 없습니다.'}</Text>
+                  </Body>
+                </CardItem>
+              </StyledCard>
+              <StyledCard>
+                <CardItem header borderd>
+                  <Text>저녁</Text>
+                </CardItem>
+                <CardItem bordered>
+                  <Body>
+                    <Text>{data.dinner !== undefined ? `${data.dinner}` : '급식이 없습니다.'}</Text>
+                  </Body>
+                </CardItem>
+              </StyledCard>
+            </View>
+          );
+        })}
+      </ScrollContainer>
     </Container>
   );
 };
@@ -160,4 +131,4 @@ Meal.navigationOptions = () => {
   };
 };
 
-export default Meal;
+export default connect(mapStateToProps)(Meal);

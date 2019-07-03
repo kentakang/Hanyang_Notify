@@ -1,12 +1,12 @@
 /* eslint-disable global-require */
 /* eslint-disable no-undef */
-import React, { useState, useEffect } from 'react';
-import { StatusBar } from 'react-native';
+import React, { useEffect } from 'react';
+import { StatusBar, ScrollView } from 'react-native';
 import styled from 'styled-components/native';
 import moment from 'moment';
-import LottieView from 'lottie-react-native';
 import { Card, CardItem, Text, Body } from 'native-base';
 import firebase from 'react-native-firebase';
+import { connect } from 'react-redux';
 
 const Container = styled.View`
   flex: 1;
@@ -51,34 +51,24 @@ const ListIcon = styled.Image`
   margin-right: 3%;
 `;
 
-const Home = () => {
+const mapStateToProps = state => {
+  const { mealList, documentList, scheduleList, noticeList } = state;
+
+  return {
+    mealList,
+    documentList,
+    scheduleList,
+    noticeList,
+  };
+};
+
+const Home = ({ mealList, scheduleList, documentList, noticeList }) => {
   const date = moment();
-  const [mealData, setMealData] = useState(null);
-  const [scheduleData, setScheduleData] = useState(null);
-  const [documentData, setDocumentData] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const formattedDate = date.format('YYYY-MM-DD');
 
   useEffect(() => {
     firebase.messaging().subscribeToTopic('ALL');
-
-    fetch(`https://hanyang.kentastudio.com/api/meal/${date.format('YYYY-MM-DD')}`)
-      .then(response => response.json())
-      .then(json => setMealData(json));
-
-    fetch(`https://hanyang.kentastudio.com/api/schedule/${date.format('YYYY-MM-DD')}`)
-      .then(response => response.json())
-      .then(json => setScheduleData(json));
-
-    fetch('https://hanyang.kentastudio.com/api/document')
-      .then(response => response.json())
-      .then(json => setDocumentData(json));
   }, []);
-
-  useEffect(() => {
-    if (mealData !== null && scheduleData !== null && documentData !== null) {
-      setIsLoading(false);
-    }
-  }, [mealData, scheduleData, documentData]);
 
   return (
     <Container>
@@ -87,61 +77,86 @@ const Home = () => {
         <TitleIcon source={require('../../resources/images/Home.png')} resizeMode="contain" />
         <Title>한양알림이</Title>
       </TitleBar>
-      <Header>{`${date.format('YYYY년 MM월 DD일')}`}</Header>
-      {isLoading ? (
-        <LottieView source={require('../../resources/animation/loading.json')} autoPlay loop />
-      ) : (
+      <ScrollView style={{ flex: 1 }}>
+        <Header>{`${date.format('YYYY년 MM월 DD일')}`}</Header>
         <Container>
           <StyledCard>
             <CardItem header>
-              <ListIcon source={require('../../resources/images/list_icon.png')} />
+              <ListIcon source={require('../../resources/images/list_icon_2.png')} />
               <Text>점심</Text>
             </CardItem>
             <CardItem bordered>
               <Body>
                 <Text>
-                  {mealData[0] !== undefined ? `${mealData[0].food}` : '급식이 없습니다.'}
+                  {mealList[formattedDate] !== undefined
+                    ? `${mealList[formattedDate].lunch}`
+                    : '급식이 없습니다.'}
                 </Text>
               </Body>
             </CardItem>
           </StyledCard>
           <StyledCard>
             <CardItem header borderd>
-              <ListIcon source={require('../../resources/images/list_icon.png')} />
+              <ListIcon source={require('../../resources/images/list_icon_2.png')} />
               <Text>저녁</Text>
             </CardItem>
             <CardItem bordered>
               <Body>
                 <Text>
-                  {mealData[1] !== undefined ? `${mealData[1].food}` : '급식이 없습니다.'}
+                  {mealList[formattedDate] !== undefined
+                    ? `${mealList[formattedDate].dinner}`
+                    : '급식이 없습니다.'}
                 </Text>
               </Body>
             </CardItem>
           </StyledCard>
           <StyledCard>
             <CardItem header borderd>
-              <ListIcon source={require('../../resources/images/list_icon.png')} />
-              <Text>학사일정</Text>
+              <ListIcon source={require('../../resources/images/list_icon_2.png')} />
+              <Text>공지사항</Text>
             </CardItem>
             <CardItem bordered>
               <Body>
-                <Text>{`${scheduleData.schedule}`}</Text>
+                <Text>
+                  {noticeList !== undefined && noticeList.length > 1
+                    ? `${noticeList[0].title}`
+                    : '공지사항이 없습니다.'}
+                </Text>
               </Body>
             </CardItem>
           </StyledCard>
           <StyledCard>
             <CardItem header borderd>
-              <ListIcon source={require('../../resources/images/list_icon.png')} />
+              <ListIcon source={require('../../resources/images/list_icon_2.png')} />
+              <Text>학사일정</Text>
+            </CardItem>
+            <CardItem bordered>
+              <Body>
+                <Text>
+                  {scheduleList[formattedDate] !== undefined
+                    ? `${scheduleList[formattedDate][0].text}`
+                    : '학사 일정이 없습니다.'}
+                </Text>
+              </Body>
+            </CardItem>
+          </StyledCard>
+          <StyledCard>
+            <CardItem header borderd>
+              <ListIcon source={require('../../resources/images/list_icon_2.png')} />
               <Text>가정통신문</Text>
             </CardItem>
             <CardItem bordered>
               <Body>
-                <Text>{`${documentData.title}`}</Text>
+                <Text>
+                  {documentList !== undefined && documentList.length > 1
+                    ? `${documentList[0].title}`
+                    : '가정통신문이 없습니다.'}
+                </Text>
               </Body>
             </CardItem>
           </StyledCard>
         </Container>
-      )}
+      </ScrollView>
     </Container>
   );
 };
@@ -152,4 +167,4 @@ Home.navigationOptions = () => {
   };
 };
 
-export default Home;
+export default connect(mapStateToProps)(Home);
