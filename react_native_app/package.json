@@ -18,6 +18,7 @@
     "react-native-calendars": "^1.188.0",
     "react-native-firebase": "^5.5.4",
     "react-native-gesture-handler": "https://github.com/kentakang/react-native-gesture-handler",
+    "react-native-render-html": "^4.1.2",
     "react-native-splash-screen": "^3.2.0",
     "react-native-vector-icons": "^6.5.0",
     "react-native-webview": "^6.3.0",
