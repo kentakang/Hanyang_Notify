@@ -11,15 +11,17 @@ import Meal from './pages/Meal';
 import Document from './pages/Document';
 import Schedule from './pages/Schedule';
 import Settings from './pages/Settings';
+import Notice from './pages/Notice';
 import { actionCreators as actions } from './reducer';
 
 const mapStateToProps = state => {
-  const { mealList, documentList, scheduleList } = state;
+  const { mealList, documentList, scheduleList, noticeList } = state;
 
   return {
     mealList,
     documentList,
     scheduleList,
+    noticeList,
   };
 };
 
@@ -28,6 +30,7 @@ const mapDispatchToProps = dispatch => {
     setMealList: bindActionCreators(actions.setMealList, dispatch),
     setDocumentList: bindActionCreators(actions.setDocumentList, dispatch),
     setScheduleList: bindActionCreators(actions.setScheduleList, dispatch),
+    setNoticeList: bindActionCreators(actions.setNoticeList, dispatch),
   };
 };
 
@@ -35,6 +38,7 @@ const Navigator = createBottomTabNavigator(
   {
     Home,
     Meal,
+    Notice,
     Document,
     Schedule,
     Settings,
@@ -62,6 +66,9 @@ const Navigator = createBottomTabNavigator(
           case 'Settings':
             iconName = 'ios-settings';
             break;
+          case 'Notice':
+            iconName = 'ios-archive';
+            break;
           default:
             break;
         }
@@ -79,7 +86,7 @@ const Container = createAppContainer(Navigator);
 
 const AppContainer = props => {
   const date = moment();
-  const loadStatus = { meal: false, document: false, schedule: false };
+  const loadStatus = { meal: false, document: false, schedule: false, notice: false };
 
   useEffect(() => {
     fetch(`https://hanyang.kentastudio.com/api/schedule/${date.format('YYYY')}`)
@@ -99,6 +106,11 @@ const AppContainer = props => {
       .then(response => response.json())
       .then(json => props.setDocumentList(props.documentList.concat(json.list)))
       .then((loadStatus.document = true));
+
+    fetch(`https://hanyang.kentastudio.com/api/notice/list/1`)
+      .then(response => response.json())
+      .then(json => props.setNoticeList(props.noticeList.concat(json.list)))
+      .then((loadStatus.notice = true));
 
     fetch(`https://hanyang.kentastudio.com/api/meal/${date.format('YYYY-MM')}`)
       .then(response => response.json())

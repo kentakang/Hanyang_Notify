@@ -20,6 +20,10 @@ dbName = ""
 if len(sys.argv) > 3:
     year = sys.argv[2]
     month = sys.argv[3]
+else:
+    year = str(datetime.today().year)
+    month = str(datetime.today().strftime("%m"))
+    day = str(datetime.today().strftime("%d"))
 
 # 급식 파싱
 def get_meal():
@@ -137,6 +141,8 @@ def get_document():
     driver = webdriver.Chrome('../../chromedriver', chrome_options=chrome_options)
     driver.implicitly_wait(3)
     driver.get('http://hanyang.hs.kr/8666/subMenu.do')
+    driver.execute_script('document.getElementById(\'customRecordCountPerPage\').value = 500;')
+    driver.execute_script('fnPageSearch(1)')
 
     bs = BeautifulSoup(driver.page_source, 'html.parser')
     notices = bs.select('.subject > .samu')
@@ -146,29 +152,96 @@ def get_document():
 
     for title in notices:
         sql = "INSERT INTO documentList(title, date, url) VALUES (%s, %s, %s)"
+        withoutURLSQL = "INSERT INTO documentList(title, date) VALUES (%s, %s)"
         countSQL = "SELECT COUNT(*) FROM documentList WHERE title = %s and date = %s"
         updateSQL = "UPDATE documentList SET url = %s WHERE title = %s and date = %s"
-  
+
         driver.execute_script(title['onclick'])
         driver.implicitly_wait(3)
 
         bs = BeautifulSoup(driver.page_source, 'html.parser')
         file_id = bs.select('input[name=atchFileId]')
-        file_id = file_id[0]['value']
-        url = f'http://viewhosting.ssem.or.kr:8080/SynapDocViewServer/job?fid={file_id}&filePath=http://hanyang.hs.kr:80/dggb/cnvrFileDown.do?atchFileId={file_id}:0&convertType=0&fileType=URL&sync=true'
+
+        if file_id:
+            file_id = file_id[0]['value']
+            url = f'http://viewhosting.ssem.or.kr:8080/SynapDocViewServer/job?fid={file_id}&filePath=http://hanyang.hs.kr:80/dggb/cnvrFileDown.do?atchFileId={file_id}:0&convertType=0&fileType=URL&sync=true'
 
         try:
             with psycopg2.connect("host=localhost dbname={0} user={1} password={2}".format(dbName, dbUser, dbPassword)) as conn:
                 with conn.cursor() as cursor:
                     cursor.execute(countSQL, (title.text, days[idx]))
                     if cursor.fetchone()[0] == 0:
-                        cursor.execute(sql, (title.text, days[idx], url))
+                        if file_id:
+                            cursor.execute(sql, (title.text, days[idx], url))
+                        else:
+                            cursor.execute(withoutURLSQL, (title.text, days[idx]))
                     else:
                         cursor.execute(updateSQL, (url, title.text, days[idx]))
         except Exception as exception:
             print(exception)
         finally:
             if conn:
+                print(title.text)
+                conn.close()
+
+        idx += 1
+
+# 공지사항 파싱
+def get_notice():
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")
+
+    driver = webdriver.Chrome('../../chromedriver', chrome_options=chrome_options)
+    driver.implicitly_wait(3)
+    driver.get('http://hanyang.hs.kr/8665/subMenu.do')
+    driver.execute_script('document.getElementById(\'customRecordCountPerPage\').value = 300;')
+    driver.execute_script('fnPageSearch(1)')
+
+    bs = BeautifulSoup(driver.page_source, 'html.parser')
+    notices = bs.select('.subject > .samu')
+    days = bs.select('tr > td')
+    days = re.findall("\\d\\d\\d\\d-\\d\\d-\\d\\d", str(days))
+    idx = 0
+
+    for title in notices:
+        sql = "INSERT INTO noticeList(title, date, content) VALUES (%s, %s, %s)"
+        withAttachementSQL = "INSERT INTO noticeList(title, date, content, attachment) VALUES (%s, %s, %s, %s)"
+        countSQL = "SELECT COUNT(*) FROM noticeList WHERE title = %s and date = %s"
+        updateSQL = "UPDATE noticeList SET content = %s WHERE title = %s and date = %s"
+        updateWithAttachmentSQL = "UPDATE noticeList SET content = %s, attachment = %s WHERE title = %s and date = %s"
+
+        driver.execute_script(title['onclick'])
+        driver.implicitly_wait(3)
+
+        bs = BeautifulSoup(driver.page_source, 'html.parser')
+        file_id = bs.select('input[name=atchFileId]')
+
+        bs = BeautifulSoup(driver.page_source, 'html.parser')
+        content = str(bs.find('div', { 'class': 'content' }))
+
+        if file_id:
+            file_id = file_id[0]['value']
+            url = f'http://viewhosting.ssem.or.kr:8080/SynapDocViewServer/job?fid={file_id}&filePath=http://hanyang.hs.kr:80/dggb/cnvrFileDown.do?atchFileId={file_id}:0&convertType=0&fileType=URL&sync=true'
+
+        try:
+            with psycopg2.connect("host=localhost dbname={0} user={1} password={2}".format(dbName, dbUser, dbPassword)) as conn:
+                with conn.cursor() as cursor:
+                    cursor.execute(countSQL, (title.text, days[idx]))
+                    if cursor.fetchone()[0] == 0:
+                        if file_id:
+                            cursor.execute(withAttachementSQL, (title.text, days[idx], content, url))
+                        else:
+                            cursor.execute(sql, (title.text, days[idx], content))
+                    else:
+                        if file_id:
+                            cursor.execute(updateWithAttachmentSQL, (content, url, title.text, days[idx]))
+                        else:
+                            cursor.execute(updateSQL, (content, title.text, days[idx]))
+        except Exception as exception:
+            print(exception)
+        finally:
+            if conn:
+                print(title.text)
                 conn.close()
 
         idx += 1
@@ -180,11 +253,15 @@ if len(sys.argv) > 1:
         get_document()
     elif sys.argv[1] == 'schedule':
         get_schedule()
+    elif sys.argv[1] == 'notice':
+        get_notice()
     else:
         get_document()
         get_meal()
         get_schedule()
+        get_notice()
 else:
     get_document()
     get_meal()
     get_schedule()
+    get_notice()

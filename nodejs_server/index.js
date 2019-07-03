@@ -20,5 +20,6 @@ app.use((res, req, next) => {
 app.use('/api/meal', require('./api/meal'));
 app.use('/api/document', require('./api/document'));
 app.use('/api/schedule', require('./api/schedule'));
+app.use('/api/notice', require('./api/notice'));
 
 app.listen(8888);
