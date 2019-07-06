@@ -105,7 +105,7 @@ android {
         applicationId "com.hycoding.hanyang_notify"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 7
+        versionCode 8
         versionName "1.2"
     }
     splits {
