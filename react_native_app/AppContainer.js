@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import NetInfo from '@react-native-community/netinfo';
 import SplashScreen from 'react-native-splash-screen';
 import { createBottomTabNavigator, createAppContainer } from 'react-navigation';
 import { bindActionCreators } from 'redux';
@@ -87,47 +88,58 @@ const Container = createAppContainer(Navigator);
 const AppContainer = props => {
   const date = moment();
   const loadStatus = { meal: false, document: false, schedule: false, notice: false };
+  const [network, setNetwork] = useState(false);
 
   useEffect(() => {
-    fetch(`https://hanyang.kentastudio.com/api/schedule/${date.format('YYYY')}`)
-      .then(response => response.json())
-      .then(json => {
-        json.forEach(data => {
-          props.setScheduleList(
-            Object.assign(props.scheduleList, {
-              [`${data.year}-${data.month}-${data.day}`]: [{ text: data.schedule }],
-            })
-          );
-        });
-      })
-      .then((loadStatus.schedule = true));
-
-    fetch(`https://hanyang.kentastudio.com/api/document/list/1`)
-      .then(response => response.json())
-      .then(json => props.setDocumentList(props.documentList.concat(json.list)))
-      .then((loadStatus.document = true));
-
-    fetch(`https://hanyang.kentastudio.com/api/notice/list/1`)
-      .then(response => response.json())
-      .then(json => props.setNoticeList(props.noticeList.concat(json.list)))
-      .then((loadStatus.notice = true));
-
-    fetch(`https://hanyang.kentastudio.com/api/meal/${date.format('YYYY-MM')}`)
-      .then(response => response.json())
-      .then(json => {
-        json.forEach(data => {
-          props.setMealList(
-            Object.assign(props.mealList, {
-              [`${data.year}-${data.month}-${data.day < 10 ? `0${data.day}` : data.day}`]: {
-                lunch: data.lunch ? data.lunch : '급식이 없습니다.',
-                dinner: data.dinner ? data.dinner : '급식이 없습니다.',
-              },
-            })
-          );
-        });
-      })
-      .then((loadStatus.meal = true));
+    NetInfo.fetch().then(state => {
+      setNetwork(state.isConnected);
+    });
   }, []);
+
+  useEffect(() => {
+    if (network) {
+      fetch(`https://hanyang.kentastudio.com/api/schedule/${date.format('YYYY')}`)
+        .then(response => response.json())
+        .then(json => {
+          json.forEach(data => {
+            props.setScheduleList(
+              Object.assign(props.scheduleList, {
+                [`${data.year}-${data.month}-${data.day}`]: [{ text: data.schedule }],
+              })
+            );
+          });
+        })
+        .then((loadStatus.schedule = true));
+
+      fetch(`https://hanyang.kentastudio.com/api/document/list/1`)
+        .then(response => response.json())
+        .then(json => props.setDocumentList(props.documentList.concat(json.list)))
+        .then((loadStatus.document = true));
+
+      fetch(`https://hanyang.kentastudio.com/api/notice/list/1`)
+        .then(response => response.json())
+        .then(json => props.setNoticeList(props.noticeList.concat(json.list)))
+        .then((loadStatus.notice = true));
+
+      fetch(`https://hanyang.kentastudio.com/api/meal/${date.format('YYYY-MM')}`)
+        .then(response => response.json())
+        .then(json => {
+          json.forEach(data => {
+            props.setMealList(
+              Object.assign(props.mealList, {
+                [`${data.year}-${data.month}-${data.day < 10 ? `0${data.day}` : data.day}`]: {
+                  lunch: data.lunch ? data.lunch : '급식이 없습니다.',
+                  dinner: data.dinner ? data.dinner : '급식이 없습니다.',
+                },
+              })
+            );
+          });
+        })
+        .then((loadStatus.meal = true));
+    } else {
+      SplashScreen.hide();
+    }
+  }, [network]);
 
   useEffect(() => {
     if (Object.keys(loadStatus).every(key => loadStatus[key] === true)) {
