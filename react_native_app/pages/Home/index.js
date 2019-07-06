@@ -2,11 +2,13 @@
 /* eslint-disable no-undef */
 import React, { useEffect } from 'react';
 import { StatusBar, ScrollView } from 'react-native';
+import { useNetInfo } from '@react-native-community/netinfo';
 import styled from 'styled-components/native';
 import moment from 'moment';
 import { Card, CardItem, Text, Body } from 'native-base';
 import firebase from 'react-native-firebase';
 import { connect } from 'react-redux';
+import { SCLAlert } from 'react-native-scl-alert';
 
 const Container = styled.View`
   flex: 1;
@@ -65,6 +67,7 @@ const mapStateToProps = state => {
 const Home = ({ mealList, scheduleList, documentList, noticeList }) => {
   const date = moment();
   const formattedDate = date.format('YYYY-MM-DD');
+  const netInfo = useNetInfo();
 
   useEffect(() => {
     firebase.messaging().subscribeToTopic('ALL');
@@ -72,6 +75,12 @@ const Home = ({ mealList, scheduleList, documentList, noticeList }) => {
 
   return (
     <Container>
+      <SCLAlert
+        theme="danger"
+        show={!netInfo.isConnected}
+        title="네트워크 오류"
+        subtitle="인터넷에 연결되어 있지 않을 경우, 한양알림이 사용이 불가능합니다."
+      />
       <StatusBar backgroundColor="#007ac1" barStyle="light-content" />
       <TitleBar>
         <TitleIcon source={require('../../resources/images/Home.png')} resizeMode="contain" />

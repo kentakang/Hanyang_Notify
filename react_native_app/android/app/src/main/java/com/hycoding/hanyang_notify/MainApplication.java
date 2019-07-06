@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.airbnb.android.react.lottie.LottiePackage;
 import com.facebook.react.ReactApplication;
+import com.reactnativecommunity.netinfo.NetInfoPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import io.invertase.firebase.RNFirebasePackage;
 import com.hycoding.hanyang_notify.BuildConfig;
@@ -35,6 +36,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new NetInfoPackage(),
           new SplashScreenReactPackage(),
           new RNCWebViewPackage(),
           new LottiePackage(),
