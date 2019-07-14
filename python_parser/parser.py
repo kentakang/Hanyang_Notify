@@ -88,50 +88,57 @@ def get_meal():
                                 x += 1
     finally:
         if conn:
+            print(exception)
             conn.close()
 
 # 학사일정 파싱
 def get_schedule():
-    url = "https://stu.sen.go.kr/sts_sci_sf01_001.do?schulCode=B100000601&schulCrseScCode=4&&schulKndScCode=04&ay=%s&mm=%s"
-    url = url % \
-        (
-            year,
-            month
-        )
-    req = urllib.request.Request(url)
-    data = urllib.request.urlopen(req).read()
+    baseUrl = "https://stu.sen.go.kr/sts_sci_sf01_001.do?schulCode=B100000601&schulCrseScCode=4&&schulKndScCode=04&ay=%s&mm=%s"
 
-    bs = BeautifulSoup(data, 'html.parser')
-    dayTable = bs.find_all('td')
+    for scheduleMonth in range(1, 13):
+        strMonth = str(scheduleMonth).zfill(2)
 
-    sql = "INSERT INTO scheduleList(year, month, day, schedule) VALUES (%s, %s, %s, %s)"
-    countSQL = "SELECT COUNT(*) FROM scheduleList WHERE year = %s and month = %s"
+        url = baseUrl % \
+            (
+                year,
+                strMonth
+            )
 
-    try:
-        with psycopg2.connect("host=localhost dbname={0} user={1} password={2}".format(dbName, dbUser, dbPassword)) as conn:
-            with conn.cursor() as cursor:
-                cursor.execute(countSQL, (year, month))
-                if cursor.fetchone()[0] == 0:
-                    for i in dayTable:
-                        day = re.findall("\\d+", i.get_text())
-                        schedules = re.findall("[가-힣()(정·부회장 선거),]+", i.get_text())
+        req = urllib.request.Request(url)
+        data = urllib.request.urlopen(req).read()
 
-                        if (len(day) > 0):
-                            x = 0
-                            schedule = ""
+        bs = BeautifulSoup(data, 'html.parser')
+        dayTable = bs.find_all('td')
 
-                            for j in schedules:
-                                schedule += j
+        sql = "INSERT INTO scheduleList(year, month, day, schedule) VALUES (%s, %s, %s, %s)"
+        countSQL = "SELECT COUNT(*) FROM scheduleList WHERE year = %s and month = %s"
 
-                            if x + 1 == len(schedules):
-                                cursor.execute(sql, (year, month, day[0], schedule))
-                            else:
-                                x += 1
-    except Exception as exception:
-        print(exception)
-    finally:
-        if conn:
+        try:
+            with psycopg2.connect("host=localhost dbname={0} user={1} password={2}".format(dbName, dbUser, dbPassword)) as conn:
+                with conn.cursor() as cursor:
+                    cursor.execute(countSQL, (year, strMonth))
+                    if cursor.fetchone()[0] == 0:
+                        for i in dayTable:
+                            day = re.findall("\\d+", i.get_text())
+                            schedules = re.findall("[가-힣()(정·부회장 선거),]+", i.get_text())
+
+                            if (len(day) > 0):
+                                x = 0
+                                schedule = ""
+
+                                for j in schedules:
+                                    schedule += j
+
+                                if x + 1 == len(schedules):
+                                    cursor.execute(sql, (year, strMonth, day[0], schedule))
+                                else:
+                                    x += 1
+        except Exception as exception:
+            print(exception)
             conn.close()
+        finally:
+            if conn:
+                conn.close()
 
 # 가정통신문 파싱
 def get_document():
@@ -179,12 +186,16 @@ def get_document():
                         cursor.execute(updateSQL, (url, title.text, days[idx]))
         except Exception as exception:
             print(exception)
+            conn.close()
+            driver.quit()
         finally:
             if conn:
                 print(title.text)
                 conn.close()
 
         idx += 1
+    
+    driver.quit()
 
 # 공지사항 파싱
 def get_notice():
@@ -239,12 +250,16 @@ def get_notice():
                             cursor.execute(updateSQL, (content, title.text, days[idx]))
         except Exception as exception:
             print(exception)
+            conn.close()
+            driver.quit()
         finally:
             if conn:
                 print(title.text)
                 conn.close()
 
         idx += 1
+    
+    driver.quit()
 
 if len(sys.argv) > 1:
     if sys.argv[1] == 'meal':
