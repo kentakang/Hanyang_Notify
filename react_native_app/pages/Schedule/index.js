@@ -107,7 +107,7 @@ const Schedule = ({ scheduleList }) => {
 
   const renderEmptyDate = () => (
     <EmptyItem>
-      <Text>This date is empty!</Text>
+      <Text>학사 일정이 없는 날입니다.</Text>
     </EmptyItem>
   );
 
@@ -123,9 +123,12 @@ const Schedule = ({ scheduleList }) => {
         items={scheduleList}
         renderItem={renderItem}
         renderEmptyDate={renderEmptyDate}
+        renderEmptyData={renderEmptyDate}
         rowHasChanged={(r1, r2) => {
           return r1.text !== r2.text;
         }}
+        minDate={`${date.format('YYYY')}-01-01`}
+        maxDate={`${date.format('YYYY')}-12-31`}
       />
     </Container>
   );
